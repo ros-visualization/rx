@@ -49,7 +49,7 @@ import rxtools.rxplot
 # TODO: poll for rospy.is_shutdown()
 def rxplot_main():
     from optparse import OptionParser
-    parser = OptionParser(usage="usage: rxplot [options] /topic/field1 [/topic/field2]")
+    parser = OptionParser(usage="usage: rxplot [options] /topic/field1 [/topic/field2] [topic/field1:field2:field3]")
     parser.add_option("-l", "--legend", type="string",
                       dest="legend", default='',
                       help="set the legend")
@@ -65,6 +65,14 @@ def rxplot_main():
     parser.add_option("-b", "--buffer", type="int",
                       dest="buffer", default=-1,
                       help="set size of buffer in seconds (default of -1 keeps all data)")
+    parser.add_option("-M", "--mode",
+                      dest="mode", default="2d",
+                      help="options: \"2d\", \"3d\", or \"scatter\" [default=%default].  "
+                      "Use \"2d\" to plot all topics vs. time.  "
+                      "Use \"3d\" or  \"scatter\" to plot in 3D using mplot3d.  "
+                      "Both \"3d\" and \"scatter\" plot against time if 2 topics"
+                      "are provided, and against third topic if 3 are provided.  "
+                      )
     options, topics = parser.parse_args()
 
     if not topics:

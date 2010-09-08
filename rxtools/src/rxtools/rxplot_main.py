@@ -78,7 +78,7 @@ def rxplot_main():
     if not topics:
         parser.error("Please specify a topic field")
     if options.mode not in ['2d', '3d', 'scatter']:
-        parser.error("invalid mode: %s"%(options.mode))
+        parser.error("invalid mode: %s\nValid modes are 2d, 3d, and scatter"%(options.mode))
         
     topic_list = []
     for t in topics:

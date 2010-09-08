@@ -67,6 +67,7 @@ import numpy as np
 import pylab
 
 from rxtools.rosplot import ROSData, is_ros_pause, is_ros_stop, toggle_ros_pause, set_ros_stop
+import mpl_toolkits.mplot3d.art3d as art3d
 
 ## Plotting colors. We artificially constrain the number of allowed plots by the number of
 ## COLORS we specify. rxplot has not been stress-tested yet
@@ -268,8 +269,14 @@ class RxPlotFrame(wx.Frame):
             self.fig.legend(self.plot_data, flat_topics, 'lower right', prop=fp)
 
     def init_plot_3d(self):
+        # init plot_data (only used for 3d mode right now until scatter is ported)
+        self.plot_data = []
+        # choose a color (for scatter mode only)
+        import random
+        self.color = COLORS[random.randint(0, len(COLORS))]
+        
         # initialize 3d axes from mplot3d
-        import mpl_toolkits.mplot3d.axes3d 
+        import mpl_toolkits.mplot3d.axes3d
         self.ax = mpl_toolkits.mplot3d.axes3d.Axes3D(self.fig)
 
         flat_topics = []
@@ -286,6 +293,7 @@ class RxPlotFrame(wx.Frame):
         elif self.ntopics == 3:
             self.ax.set_zlabel(flat_topics[2])
         else:
+            #TODO: this checking belongs in the arg parsing
             rospy.logerr("Expected 2 or 3 topics, but got %d" % ntopics)
             wx.GetApp().Exit()
             return
@@ -341,6 +349,7 @@ class RxPlotFrame(wx.Frame):
     def draw_plot_3d(self, relimit=False):
         # Don't have to relimit 3d plots
         if self.datax[0] and self.datay[0] and self.datay[1]:
+
             ndata = len(self.datay)
             if ndata >=2:
                 datax = np.array(self.datay[0])
@@ -354,10 +363,21 @@ class RxPlotFrame(wx.Frame):
             else:
                 print "unexpected input data dimensions for 3d plotting (%d)" % ndata
 
-            if self.mode == "3d":
-                self.ax.plot(datax, datay, dataz)
-            elif self.mode == "scatter":
-                self.ax.scatter(datax, datay, dataz)
+            if self.mode == '3d':
+                if not self.plot_data:
+                    self.plot_data = self.ax.plot(datax, datay, dataz)
+
+                self.plot_data[0].set_data(datax, datay)
+                art3d.line_2d_to_3d(self.plot_data[0], zs=dataz, zdir='z')
+                self.ax.auto_scale_xyz(datax, datay, dataz, True)
+            else:
+                # 'blue' is arbitrary, just have to keep mpl from choosing different each time.
+                #
+                # kwc: I haven't figured out how to performance tune
+                # scatter plots the same way I tuned the 3d plot. The
+                # MPL APIs are a bit haphazard when it comes to 3d
+                # plotting.
+                self.plot_data = self.ax.scatter(datax, datay, dataz, color=self.color)
 
             self.canvas.draw()
     

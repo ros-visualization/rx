@@ -79,6 +79,16 @@ def rxplot_main():
         parser.error("Please specify a topic field")
     if options.mode not in ['2d', '3d', 'scatter']:
         parser.error("invalid mode: %s\nValid modes are 2d, 3d, and scatter"%(options.mode))
+    elif options.mode in ['3d', 'scatter']:
+        #TODO: need a better spec on what the 3d topic args are. It
+        #would be nice if the 3d plot were as robust as the normal
+        #rxplot with respect to having more plots.
+        flat_topics = []
+        for topic_list in topics:
+            for topic in topic_list:
+                flat_topics.append(topic)
+        if len(flat_topics) < 2 or len(flat_topics) > 3:
+            parser.error("You may only specific 2 or 3 topics with '3d' or 'scatter'.\nWhen 2 topics are provided, time is used as the third axis.")
         
     topic_list = []
     for t in topics:

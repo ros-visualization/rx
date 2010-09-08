@@ -284,19 +284,16 @@ class RxPlotFrame(wx.Frame):
             for topic in topic_list:
                 flat_topics.append(topic)
                 
-        self.ntopics = len(flat_topics)
-        if self.ntopics <= 3:
+        ntopics = len(flat_topics)
+        if ntopics <= 3:
             self.ax.set_xlabel(flat_topics[0])
             self.ax.set_ylabel(flat_topics[1])
-        if self.ntopics == 2:
+        if ntopics == 2:
             self.ax.set_zlabel("time")
-        elif self.ntopics == 3:
+        elif ntopics == 3:
             self.ax.set_zlabel(flat_topics[2])
         else:
-            #TODO: this checking belongs in the arg parsing
-            rospy.logerr("Expected 2 or 3 topics, but got %d" % ntopics)
-            wx.GetApp().Exit()
-            return
+            raise Exception("Expected 2 or 3 topics, but got %d" % (ntopics))
 
         # attach mouse handler (must be called after FigCanvas)
         self.ax.mouse_init()

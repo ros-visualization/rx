@@ -35,10 +35,10 @@
 WXVER = '2.8' 
 import wxversion 
 if wxversion.checkInstalled(WXVER): 
-  wxversion.select(WXVER) 
+    wxversion.select(WXVER) 
 else: 
-  print >> sys.stderr, "This application requires wxPython version %s"%(WXVER) 
-  sys.exit(1) 
+    print >> sys.stderr, "This application requires wxPython version %s"%(WXVER) 
+    sys.exit(1) 
 import wx
 
 import roslib.scriptutil
@@ -77,6 +77,8 @@ def rxplot_main():
 
     if not topics:
         parser.error("Please specify a topic field")
+    if options.mode not in ['2d', '3d', 'scatter']:
+        parser.error("invalid mode: %s"%(options.mode))
         
     topic_list = []
     for t in topics:

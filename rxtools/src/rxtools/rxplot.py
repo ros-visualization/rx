@@ -67,6 +67,7 @@ import numpy as np
 import pylab
 
 from rxtools.rosplot import ROSData, is_ros_pause, is_ros_stop, toggle_ros_pause, set_ros_stop
+import mpl_toolkits.mplot3d.art3d as art3d
 
 ## Plotting colors. We artificially constrain the number of allowed plots by the number of
 ## COLORS we specify. rxplot has not been stress-tested yet
@@ -124,6 +125,16 @@ class RxPlotFrame(wx.Frame):
     def __init__(self, topics, options):
         self.title = options.title
         self.legend = options.legend
+        self.mode = options.mode
+        if self.mode == '2d':
+            self.draw_plot = self.draw_plot_2d
+            self.init_plot = self.init_plot_2d
+        elif self.mode in ['3d', 'scatter']:
+            self.draw_plot = self.draw_plot_3d
+            self.init_plot = self.init_plot_3d
+        else:
+            raise ValueError("Mode must be one of [2d, 3d, scatter], not [%s]"%(options.mode))
+        
         wx.Frame.__init__(self, None, -1, self.title)
 
         # There are two different indicies for our list data types based on the fact that topics is
@@ -167,9 +178,10 @@ class RxPlotFrame(wx.Frame):
         self.create_main_canvas()
         
         self.redraw_timer = wx.Timer(self)
-        self.Bind(wx.EVT_TIMER, self.on_redraw_timer, self.redraw_timer)        
+        self.Bind(wx.EVT_TIMER, self.on_redraw_timer, self.redraw_timer)
+        
         #self.redraw_timer.Start(100)
-        self.redraw_timer.Start(500)        
+        self.redraw_timer.Start(500)
 
     def create_menu(self):
         self.menubar = wx.MenuBar()
@@ -191,10 +203,16 @@ class RxPlotFrame(wx.Frame):
         self.statusbar.SetStatusText("%s, %s" % (xdata[ind][len(xdata[ind])/2], ydata[ind][len(ydata[ind])/2]))
 
     def create_main_canvas(self):
-        self.init_plot()
+        # Create main figure
+        self.dpi = 100
+        params = matplotlib.figure.SubplotParams(left=0.125, bottom=0.12, right=0.99, top=0.99, wspace=0.001, hspace=0.1)
+        self.fig = Figure((3.0, 3.0), dpi=self.dpi, subplotpars=params)
+
         self.canvas = FigCanvas(self, -1, self.fig)
         self.canvas.mpl_connect('pick_event', self.onpick)
 
+        self.init_plot()
+        
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.sizer.Add(self.canvas, 1, flag=wx.LEFT | wx.TOP | wx.GROW)
         self.SetSizer(self.sizer)
@@ -204,16 +222,13 @@ class RxPlotFrame(wx.Frame):
         self.SetSize(wx.Size(500, 700))
         self.Layout()
     
-    def init_plot(self):
-        self.dpi = 100
-        rc = matplotlib.figure.SubplotParams(left=0.125, bottom=0.12, right=0.99, top=0.99, wspace=0.001, hspace=0.1)
-        self.fig = Figure((3.0, 3.0), dpi=self.dpi, subplotpars=rc)
-
+    def init_plot_2d(self):
         self.plot_data = []
         flat_topics = []
 
         axes_index = 0
         plot_index = 0
+
         for topic_list in self.topics:
             axes = self.fig.add_subplot(string.atoi('%d1%d'%(len(self.topics), axes_index+1))) 
             axes.set_axis_bgcolor('white')            
@@ -238,10 +253,12 @@ class RxPlotFrame(wx.Frame):
                 self.plot_data.append(plot_data)
                 plot_index += 1
 
+        # Set grid visibility properties
         for ax in self.axes:
             ax.grid(True, color='gray')
             pylab.setp(ax.get_xticklabels(), visible=True)
-
+            
+        # Make a legend
         fp = matplotlib.font_manager.FontProperties(size=8)
         legends = self.legend.split(",") if self.legend else []
         if legends:
@@ -251,10 +268,41 @@ class RxPlotFrame(wx.Frame):
         elif len(flat_topics) > 1:
             self.fig.legend(self.plot_data, flat_topics, 'lower right', prop=fp)
 
-    def draw_plot(self, relimit=False):
+    def init_plot_3d(self):
+        # init plot_data (only used for 3d mode right now until scatter is ported)
+        self.plot_data = []
+        # choose a color (for scatter mode only)
+        import random
+        self.color = COLORS[random.randint(0, len(COLORS))]
+        
+        # initialize 3d axes from mplot3d
+        import mpl_toolkits.mplot3d.axes3d
+        self.ax = mpl_toolkits.mplot3d.axes3d.Axes3D(self.fig)
+
+        flat_topics = []
+        for topic_list in self.topics:
+            for topic in topic_list:
+                flat_topics.append(topic)
+                
+        ntopics = len(flat_topics)
+        if ntopics <= 3:
+            self.ax.set_xlabel(flat_topics[0])
+            self.ax.set_ylabel(flat_topics[1])
+        if ntopics == 2:
+            self.ax.set_zlabel("time")
+        elif ntopics == 3:
+            self.ax.set_zlabel(flat_topics[2])
+        else:
+            raise Exception("Expected 2 or 3 topics, but got %d" % (ntopics))
+
+        # attach mouse handler (must be called after FigCanvas)
+        self.ax.mouse_init()
+
+    def draw_plot_2d(self, relimit=False):
         if not self.plot_data:
             return
         
+        # Set axis bounds
         if relimit and self.datax[0]:
             axes_index = 0
             plot_index = 0
@@ -285,6 +333,7 @@ class RxPlotFrame(wx.Frame):
                     axes.set_xbound(lower=xmin, upper=xmax)
                     axes.set_ybound(lower=ymin, upper=ymax)
 
+        # Set plot data on current axes
         for plot_index in xrange(0, len(self.plot_data)):
             datax = self.datax[plot_index]
             datay = self.datay[plot_index]
@@ -293,6 +342,41 @@ class RxPlotFrame(wx.Frame):
             plot_data.set_data(np.array(datax), np.array(datay))
 
         self.canvas.draw()
+
+    def draw_plot_3d(self, relimit=False):
+        # Don't have to relimit 3d plots
+        if self.datax[0] and self.datay[0] and self.datay[1]:
+
+            ndata = len(self.datay)
+            if ndata >=2:
+                datax = np.array(self.datay[0])
+                datay = np.array(self.datay[1])
+        
+            # Plot time from topic 1 on z if no third topic is provided
+            if ndata == 2:
+                dataz = np.array(self.datax[0])
+            elif ndata == 3 and self.datay[2]:
+                dataz = np.array(self.datay[2])
+            else:
+                print "unexpected input data dimensions for 3d plotting (%d)" % ndata
+
+            if self.mode == '3d':
+                if not self.plot_data:
+                    self.plot_data = self.ax.plot(datax, datay, dataz)
+
+                self.plot_data[0].set_data(datax, datay)
+                art3d.line_2d_to_3d(self.plot_data[0], zs=dataz, zdir='z')
+                self.ax.auto_scale_xyz(datax, datay, dataz, True)
+            else:
+                # 'blue' is arbitrary, just have to keep mpl from choosing different each time.
+                #
+                # kwc: I haven't figured out how to performance tune
+                # scatter plots the same way I tuned the 3d plot. The
+                # MPL APIs are a bit haphazard when it comes to 3d
+                # plotting.
+                self.plot_data = self.ax.scatter(datax, datay, dataz, color=self.color)
+
+            self.canvas.draw()
     
     def on_save_plot(self, event):
         file_choices = "PNG (*.png)|*.png"
@@ -309,7 +393,7 @@ class RxPlotFrame(wx.Frame):
             path = dlg.GetPath()
             self.canvas.print_figure(path, dpi=self.dpi)
             self.flash_status_message("Saved to %s" % path)
-    
+
     def on_redraw_timer(self, event):
         # if paused do not add data, but still redraw the plot
         # (to respond to scale modifications, grid change, etc.)
@@ -383,10 +467,15 @@ class RxPlotFrame(wx.Frame):
 def rxplot_app(topic_list, options):
     rospy.init_node('rxplot', anonymous=True)
 
-    app = wx.PySimpleApp()    
-    app.frame = rxtools.rxplot.RxPlotFrame(topic_list, options)
-    app.frame.Show()
-    app.MainLoop()
+    try:
+        app = wx.PySimpleApp()    
+        app.frame = rxtools.rxplot.RxPlotFrame(topic_list, options)
+        app.frame.Show()
+        app.MainLoop()
+    except Exception, e:
+        rospy.logerr(e)
+        print >> sys.stderr, str(e)
+        wx.GetApp().Exit()
     
     rospy.signal_shutdown('GUI shutdown')    
 

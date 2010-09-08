@@ -83,6 +83,3 @@ target_link_libraries(rxconsole ${PROJECT_NAME})
 #rxloggerlevel binary
 rosbuild_add_executable(rxloggerlevel src/rxloggerlevel/rxloggerlevel.cpp)
 target_link_libraries(rxloggerlevel ${PROJECT_NAME})
-
-add_subdirectory(src/rxconsole)
-add_subdirectory(src/rxloggerlevel)

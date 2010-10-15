@@ -1,0 +1,9 @@
+<stack>
+  <description brief="rx">Empty release of rx to facilitate dependency migration</description>
+  <author>Maintained by Ken Conley</author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/rx</url>
+  <depend stack="ros" /> 
+
+</stack>

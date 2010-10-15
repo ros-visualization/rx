@@ -1,0 +1,14 @@
+<package>
+  <description brief="rx_empty">
+
+     rx_empty
+
+  </description>
+  <author>Kenneth Conley</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/rx_empty</url>
+
+</package>
+
+

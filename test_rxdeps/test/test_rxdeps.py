@@ -50,12 +50,19 @@ ROS_LANG_DISABLE = 'ROS_LANG_DISABLE'
 ## Process-level tests of rxdeps executable
 class RxdepsTestCase(unittest.TestCase):
     
+    def setUp(self):
+        self.rxdeps_dir = roslib.packages.get_pkg_dir("rxdeps")
+        self.pkg_dir = roslib.packages.get_pkg_dir("test_rxdeps")
+        self.assert_(os.path.isdir(self.pkg_dir), "cannot locate test_rxdeps")
+        self.test_dir = os.path.join(self.pkg_dir,"test/test_packages")
+        self.assert_(os.path.isdir(self.test_dir), "cannot locate test dirs")
+        
     ## runs rxdeps with ROS_ROOT set to ./test and ROS_PACKAGE_PATH unset
     ## @return int, str: return code, stdout
     def _run_rxdeps(self, ros_package_path, pkgname, command):
         env = os.environ.copy()
         if ros_package_path is not None:
-            env[ROS_PACKAGE_PATH] = ros_package_path
+            env[ROS_PACKAGE_PATH] = ros_package_path+os.pathsep+self.rxdeps_dir
 
         # Must split up the command string into its whitespace separated
         # components; otherwise you get multiple words as one element of
@@ -63,10 +70,10 @@ class RxdepsTestCase(unittest.TestCase):
         #args = ["rxdeps", command, pkgname]
         args = ["rxdeps"]
         if command:
-          for s in command.split():
-            args.append(s)
+            for s in command.split():
+                args.append(s)
         if pkgname is not None:
-          args.append("--target=%s"%pkgname)
+            args.append("--target=%s"%pkgname)
         p = Popen(args, stdout=PIPE, stderr=PIPE, env=env)
         stdout, stderr = p.communicate()
 
@@ -87,7 +94,7 @@ class RxdepsTestCase(unittest.TestCase):
 
 
     def test_utest(self):
-        ret, out, err = self._run_rxdeps(os.path.join(roslib.packages.get_pkg_dir("test_rxdeps"),"test/test_packages"), "pkg1", "--graphviz-output=deps.gv")
+        ret, out, err = self._run_rxdeps(self.test_dir, "pkg1", "--graphviz-output=deps.gv")
         self.assertTrue(ret == 0)
         #print ret, out, err
         with open("deps.gv") as fh:
@@ -106,7 +113,7 @@ class RxdepsTestCase(unittest.TestCase):
         os.remove("deps.pdf")
 
     def test_exclude(self):
-        ret, out, err = self._run_rxdeps(os.path.join(roslib.packages.get_pkg_dir("test_rxdeps"),"test/test_packages"), "pkg1", "--graphviz-output=deps.gv --exclude=pkg2")
+        ret, out, err = self._run_rxdeps(self.test_dir, "pkg1", "--graphviz-output=deps.gv --exclude=pkg2")
         self.assertTrue(ret == 0)
         #print ret, out, err
         with open("deps.gv") as fh:
@@ -124,7 +131,7 @@ class RxdepsTestCase(unittest.TestCase):
 
 
     def test_output_arg(self):
-        ret, out, err = self._run_rxdeps(os.path.join(roslib.packages.get_pkg_dir("test_rxdeps"),"test/test_packages"), "pkg1",  "--graphviz-output=deps.gv -oout.pdf")
+        ret, out, err = self._run_rxdeps(self.test_dir, "pkg1",  "--graphviz-output=deps.gv -oout.pdf")
         self.assertTrue(ret == 0)
         #print ret, out, err
         with open("deps.gv") as fh:
@@ -144,7 +151,7 @@ class RxdepsTestCase(unittest.TestCase):
         os.remove("out.pdf")
 
     def test_usage(self):
-        ret, out, err = self._run_rxdeps(os.path.join(roslib.packages.get_pkg_dir("test_rxdeps"),"test/test_packages"), "pkg1", "-h")
+        ret, out, err = self._run_rxdeps(self.test_dir, "pkg1", "-h")
         self.assertTrue(ret == 0)
         self.assertEqual(out.count("Usage:"), 1)
         #print ret, out, err

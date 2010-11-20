@@ -1,9 +1,10 @@
 <stack>
   <description brief="rx">GUI tools for ROS: rxbag, rxplot, rxgraph, and others.</description>
   <author>Maintained by Ken Conley</author>
-  <license>BSD,LGPL/BSD,wxWindows,BSD, Creative Commons</license>  
+  <license>BSD,LGPL/BSD,Creative Commons,wxWindows,BSD, Creative Commons</license>  
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/rx</url>
-  <depend stack="ros" /> <!-- roscpp, std_msgs, roslib, rosgraph, rostest, rospy, rostopic, rosnode, rosbag -->
+  <depend stack="ros" /> <!-- roslib -->
+  <depend stack="ros_comm" /> <!-- roscpp, rosgraph, std_msgs, rostest, rospy, rostopic, rosnode, rosbag -->
 
 </stack>

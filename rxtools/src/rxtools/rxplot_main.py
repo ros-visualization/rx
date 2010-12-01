@@ -73,7 +73,7 @@ def rxplot_main():
                       "Both \"3d\" and \"scatter\" plot against time if 2 topics"
                       "are provided, and against third topic if 3 are provided.  "
                       )
-    options, topics = parser.parse_args()
+    options, topics = parser.parse_args(rospy.myargv()[1:])
 
     if not topics:
         parser.error("Please specify a topic field")

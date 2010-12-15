@@ -495,16 +495,16 @@ void RosoutPanel::onClear(wxCommandEvent& event)
   clear();
 }
 
-void RosoutPanel::addMessageToTable(const roslib::Log::ConstPtr& message, uint32_t id)
+void RosoutPanel::addMessageToTable(const rosgraph_msgs::Log::ConstPtr& message, uint32_t id)
 {
   ordered_messages_.push_back(id);
 }
 
-roslib::LogConstPtr RosoutPanel::getMessageByIndex(uint32_t index) const
+rosgraph_msgs::LogConstPtr RosoutPanel::getMessageByIndex(uint32_t index) const
 {
   if (index >= ordered_messages_.size())
   {
-    return roslib::LogConstPtr();
+    return rosgraph_msgs::LogConstPtr();
   }
 
   M_IdToMessage::const_iterator it = messages_.find(ordered_messages_[index]);
@@ -524,7 +524,7 @@ bool RosoutPanel::filter(uint32_t id) const
   M_IdToMessage::const_iterator it = messages_.find(id);
   ROS_ASSERT(it != messages_.end());
 
-  const roslib::LogConstPtr& message = it->second;
+  const rosgraph_msgs::LogConstPtr& message = it->second;
 
   // First run through the severity filter
   if (!severity_filter_->filter(message))
@@ -580,7 +580,7 @@ void RosoutPanel::refilter()
   for (; it != end; ++it)
   {
     uint32_t id = it->first;
-    roslib::Log::ConstPtr& message = it->second;
+    rosgraph_msgs::Log::ConstPtr& message = it->second;
 
     if (filter(id))
     {
@@ -625,7 +625,7 @@ void RosoutPanel::popMessage()
   messages_.erase(it);
 }
 
-void RosoutPanel::processMessage(const roslib::Log::ConstPtr& message)
+void RosoutPanel::processMessage(const rosgraph_msgs::Log::ConstPtr& message)
 {
   uint32_t id = message_id_counter_++;
 
@@ -657,7 +657,7 @@ void RosoutPanel::processMessages()
   V_Log::iterator end = message_queue_.end();
   for (; it != end; ++it)
   {
-    roslib::Log::ConstPtr& message = *it;
+    rosgraph_msgs::Log::ConstPtr& message = *it;
 
     processMessage(message);
   }
@@ -669,7 +669,7 @@ void RosoutPanel::processMessages()
   table_->postItemChanges();
 }
 
-void RosoutPanel::incomingMessage(const roslib::Log::ConstPtr& msg)
+void RosoutPanel::incomingMessage(const rosgraph_msgs::Log::ConstPtr& msg)
 {
   if (!pause_)
   {
@@ -716,7 +716,7 @@ RosoutMessageSummary RosoutPanel::getMessageSummary(double duration) const
   M_IdToMessage::const_reverse_iterator end = messages_.rend();
   for (; it != end; ++it)
   {
-    const roslib::Log::ConstPtr& msg = it->second;
+    const rosgraph_msgs::Log::ConstPtr& msg = it->second;
 
     if (msg->header.stamp < search_end)
     {
@@ -725,19 +725,19 @@ RosoutMessageSummary RosoutPanel::getMessageSummary(double duration) const
 
     switch (msg->level)
     {
-    case roslib::Log::DEBUG:
+    case rosgraph_msgs::Log::DEBUG:
       ++summary.debug;
       break;
-    case roslib::Log::INFO:
+    case rosgraph_msgs::Log::INFO:
       ++summary.info;
       break;
-    case roslib::Log::WARN:
+    case rosgraph_msgs::Log::WARN:
       ++summary.warn;
       break;
-    case roslib::Log::ERROR:
+    case rosgraph_msgs::Log::ERROR:
       ++summary.error;
       break;
-    case roslib::Log::FATAL:
+    case rosgraph_msgs::Log::FATAL:
       ++summary.fatal;
       break;
     }

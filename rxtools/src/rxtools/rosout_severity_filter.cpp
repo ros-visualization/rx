@@ -45,24 +45,24 @@ void RosoutSeverityFilter::setSeverityMask(uint32_t field_mask)
   changed();
 }
 
-bool RosoutSeverityFilter::doFilter(const roslib::LogConstPtr& msg) const
+bool RosoutSeverityFilter::doFilter(const rosgraph_msgs::LogConstPtr& msg) const
 {
   bool match = false;
   switch (msg->level)
   {
-  case roslib::Log::DEBUG:
+  case rosgraph_msgs::Log::DEBUG:
     match = severity_mask_ & Debug;
     break;
-  case roslib::Log::INFO:
+  case rosgraph_msgs::Log::INFO:
     match = severity_mask_ & Info;
     break;
-  case roslib::Log::WARN:
+  case rosgraph_msgs::Log::WARN:
     match = severity_mask_ & Warn;
     break;
-  case roslib::Log::ERROR:
+  case rosgraph_msgs::Log::ERROR:
     match = severity_mask_ & Error;
     break;
-  case roslib::Log::FATAL:
+  case rosgraph_msgs::Log::FATAL:
     match = severity_mask_ & Fatal;
     break;
   }

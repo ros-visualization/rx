@@ -170,7 +170,7 @@ bool RosoutTextFilter::filterVector(const std::vector<std::string>& strs) const
   return false;
 }
 
-bool RosoutTextFilter::doFilter(const roslib::LogConstPtr& msg) const
+bool RosoutTextFilter::doFilter(const rosgraph_msgs::LogConstPtr& msg) const
 {
   if (text_.empty())
   {

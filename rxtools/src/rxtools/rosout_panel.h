@@ -37,7 +37,7 @@
 
 #include "rosout_generated.h"
 #include "rosout_filter.h"
-#include "roslib/Log.h"
+#include "rosgraph_msgs/Log.h"
 
 #include <ros/ros.h>
 #include <ros/callback_queue.h>
@@ -126,7 +126,7 @@ public:
    */
   void setEnabled(bool enabled);
   /**
-   * \brief Set the topic to listen on for roslib::Log messages
+   * \brief Set the topic to listen on for rosgraph_msgs::Log messages
    * @param topic The topic name
    */
   void setTopic(const std::string& topic);
@@ -154,7 +154,7 @@ public:
    * @param index Index of the message to return
    * @return The message
    */
-  roslib::LogConstPtr getMessageByIndex(uint32_t index) const;
+  rosgraph_msgs::LogConstPtr getMessageByIndex(uint32_t index) const;
 
   RosoutTextFilterPtr createTextFilter();
   RosoutFrame* createNewFrame();
@@ -211,7 +211,7 @@ protected:
   /**
    * \brief (ros callback) Called when there is a new message waiting
    */
-  void incomingMessage(const roslib::Log::ConstPtr& message);
+  void incomingMessage(const rosgraph_msgs::Log::ConstPtr& message);
   /**
    * \brief Processes any messages in our message queue
    */
@@ -220,13 +220,13 @@ protected:
    * \brief Process a log message
    * @param message The message to process
    */
-  void processMessage(const roslib::Log::ConstPtr& message);
+  void processMessage(const rosgraph_msgs::Log::ConstPtr& message);
   /**
    * \brief Add a message to the table
    * @param message The message
    * @param id The unique id of the message
    */
-  void addMessageToTable(const roslib::Log::ConstPtr& message, uint32_t id);
+  void addMessageToTable(const rosgraph_msgs::Log::ConstPtr& message, uint32_t id);
 
   /**
    * \brief Filter a message based on our current filter
@@ -246,7 +246,7 @@ protected:
   void addFilter(const RosoutFilterPtr& filter, wxWindow* control);
   void removeFilter(const RosoutFilterPtr& filter);
 
-  typedef std::map<uint32_t, roslib::Log::ConstPtr> M_IdToMessage;
+  typedef std::map<uint32_t, rosgraph_msgs::Log::ConstPtr> M_IdToMessage;
   // dirty hack, really need to be able to share a backing set of messages
   void setMessages(const M_IdToMessage& messages);
 
@@ -257,7 +257,7 @@ protected:
 
   ros::NodeHandle nh_;
 
-  typedef std::vector<roslib::Log::ConstPtr> V_Log;
+  typedef std::vector<rosgraph_msgs::Log::ConstPtr> V_Log;
   V_Log message_queue_; ///< Queue of messages we've received since the last time processMessages() was called
 
   wxTimer* process_timer_; ///< Timer used to periodically process messages

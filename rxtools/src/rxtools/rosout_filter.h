@@ -32,7 +32,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/signals.hpp>
-#include "roslib/Log.h"
+#include "rosgraph_msgs/Log.h"
 
 namespace rxtools
 {
@@ -46,7 +46,7 @@ public:
   RosoutFilter();
   virtual ~RosoutFilter();
 
-  bool filter(const roslib::LogConstPtr&) const;
+  bool filter(const rosgraph_msgs::LogConstPtr&) const;
   bool isValid() const;
   bool isEnabled() const;
 
@@ -60,7 +60,7 @@ public:
 protected:
   void changed() const;
 
-  virtual bool doFilter(const roslib::LogConstPtr&) const = 0;
+  virtual bool doFilter(const rosgraph_msgs::LogConstPtr&) const = 0;
   virtual bool doIsValid() const = 0;
 
 private:

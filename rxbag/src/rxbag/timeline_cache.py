@@ -45,7 +45,7 @@ import time
 import wx
 
 class TimelineCache(threading.Thread):
-    def __init__(self, loader, listener=None, max_cache_size=50):
+    def __init__(self, loader, listener=None, max_cache_size=100):
         threading.Thread.__init__(self)
 
         self.loader    = loader

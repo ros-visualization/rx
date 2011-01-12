@@ -41,7 +41,7 @@ RosoutFilter::~RosoutFilter()
 {
 }
 
-bool RosoutFilter::filter(const roslib::LogConstPtr& msg) const
+bool RosoutFilter::filter(const rosgraph_msgs::LogConstPtr& msg) const
 {
   return doFilter(msg);
 }

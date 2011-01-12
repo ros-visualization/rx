@@ -82,7 +82,7 @@ public:
   FilterType getFilterType() { return type_; }
 
 protected:
-  virtual bool doFilter(const roslib::LogConstPtr&) const;
+  virtual bool doFilter(const rosgraph_msgs::LogConstPtr&) const;
   virtual bool doIsValid() const;
 
 private:

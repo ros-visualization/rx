@@ -37,7 +37,7 @@
 
 #include "topic_display_dialog.h"
 
-#include "roslib/Log.h"
+#include "rosgraph_msgs/Log.h"
 
 namespace rxtools
 {
@@ -71,7 +71,7 @@ uint32_t RosoutSetupDialog::getBufferSize()
 
 void RosoutSetupDialog::onTopicBrowse(wxCommandEvent& event)
 {
-  TopicDisplayDialog dialog(this, false, roslib::Log::__s_getDataType());
+  TopicDisplayDialog dialog(this, false, rosgraph_msgs::Log::__s_getDataType());
   if (dialog.ShowModal() == wxID_OK)
   {
     std::vector<std::string> selection;

@@ -74,7 +74,11 @@ class RxBagApp(wx.App):
                     if not record_filename.endswith('.bag'):
                         record_filename += '.bag'
                 elif self.options.prefix:
-                    record_filename = '%s_%s' % (self.options.prefix, record_filename)
+                    prefix = self.options.prefix
+                    if prefix.endswith('.bag'):
+                        prefix = prefix[:-len('.bag')]
+                    if prefix:
+                        record_filename = '%s_%s' % (prefix, record_filename)
 
                 rospy.loginfo('Recording to %s.' % record_filename)
 

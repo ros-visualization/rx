@@ -102,19 +102,19 @@ void RosoutListControl::setModel(RosoutPanel* model)
   model_ = model;
 }
 
-wxString RosoutListControl::getSeverityText(const roslib::LogConstPtr& message) const
+wxString RosoutListControl::getSeverityText(const rosgraph_msgs::LogConstPtr& message) const
 {
   switch (message->level)
   {
-  case roslib::Log::DEBUG:
+  case rosgraph_msgs::Log::DEBUG:
     return wxT("Debug");
-  case roslib::Log::INFO:
+  case rosgraph_msgs::Log::INFO:
     return wxT("Info");
-  case roslib::Log::WARN:
+  case rosgraph_msgs::Log::WARN:
     return wxT("Warn");
-  case roslib::Log::ERROR:
+  case rosgraph_msgs::Log::ERROR:
     return wxT("Error");
-  case roslib::Log::FATAL:
+  case rosgraph_msgs::Log::FATAL:
     return wxT("Fatal");
   }
 
@@ -125,7 +125,7 @@ int RosoutListControl::OnGetItemImage(long item) const
 {
   ROS_ASSERT(model_);
 
-  roslib::LogConstPtr message = model_->getMessageByIndex(item);
+  rosgraph_msgs::LogConstPtr message = model_->getMessageByIndex(item);
   if (!message)
   {
     return -1;
@@ -133,15 +133,15 @@ int RosoutListControl::OnGetItemImage(long item) const
 
   switch (message->level)
   {
-  case roslib::Log::DEBUG:
+  case rosgraph_msgs::Log::DEBUG:
     return debug_image_id_;
-  case roslib::Log::INFO:
+  case rosgraph_msgs::Log::INFO:
     return info_image_id_;
-  case roslib::Log::WARN:
+  case rosgraph_msgs::Log::WARN:
     return warning_image_id_;
-  case roslib::Log::ERROR:
+  case rosgraph_msgs::Log::ERROR:
     return error_image_id_;
-  case roslib::Log::FATAL:
+  case rosgraph_msgs::Log::FATAL:
     return fatal_image_id_;
   }
 
@@ -153,23 +153,23 @@ wxListItemAttr * RosoutListControl::OnGetItemAttr(long item) const
 #if 0
   ROS_ASSERT(model_);
 
-  const roslib::Log& message = model_->getMessageByIndex(item);
+  const rosgraph_msgs::Log& message = model_->getMessageByIndex(item);
 
   switch( message->level )
   {
-    case roslib::Log::DEBUG:
+    case rosgraph_msgs::Log::DEBUG:
     attr_.SetBackgroundColour( wxColour( 204, 255, 204 ) );
     break;
-    case roslib::Log::INFO:
+    case rosgraph_msgs::Log::INFO:
     attr_.SetBackgroundColour( *wxWHITE );
     break;
-    case roslib::Log::WARN:
+    case rosgraph_msgs::Log::WARN:
     attr_.SetBackgroundColour( wxColour( 255, 255, 153 ) );
     break;
-    case roslib::Log::ERROR:
+    case rosgraph_msgs::Log::ERROR:
     attr_.SetBackgroundColour( wxColour( 255, 153, 0 ) );
     break;
-    case roslib::Log::FATAL:
+    case rosgraph_msgs::Log::FATAL:
     attr_.SetBackgroundColour( *wxRED );
     break;
     default:
@@ -184,7 +184,7 @@ wxString RosoutListControl::OnGetItemText(long item, long column) const
 {
   ROS_ASSERT(model_);
 
-  roslib::LogConstPtr message = model_->getMessageByIndex(item);
+  rosgraph_msgs::LogConstPtr message = model_->getMessageByIndex(item);
   if (!message)
   {
     return wxString();
@@ -304,7 +304,7 @@ void RosoutListControl::onItemActivated(wxListEvent& event)
 {
   ROS_ASSERT(model_);
 
-  roslib::LogConstPtr message = model_->getMessageByIndex(event.GetIndex());
+  rosgraph_msgs::LogConstPtr message = model_->getMessageByIndex(event.GetIndex());
   if (!message)
   {
     return;
@@ -403,11 +403,11 @@ void addFilter(RosoutPanel* model, const std::string& text, uint32_t field_mask,
   model->refilter();
 }
 
-roslib::LogConstPtr RosoutListControl::getSelectedMessage()
+rosgraph_msgs::LogConstPtr RosoutListControl::getSelectedMessage()
 {
   if (last_selection_ == -1)
   {
-    return roslib::LogConstPtr();
+    return rosgraph_msgs::LogConstPtr();
   }
 
   return model_->getMessageByIndex(last_selection_);
@@ -415,7 +415,7 @@ roslib::LogConstPtr RosoutListControl::getSelectedMessage()
 
 void RosoutListControl::onExcludeLocation(wxCommandEvent& event)
 {
-  if (roslib::LogConstPtr message = getSelectedMessage())
+  if (rosgraph_msgs::LogConstPtr message = getSelectedMessage())
   {
     std::stringstream ss;
     ss << message->file << ":" << message->function << ":" << message->line;
@@ -425,7 +425,7 @@ void RosoutListControl::onExcludeLocation(wxCommandEvent& event)
 
 void RosoutListControl::onExcludeNode(wxCommandEvent& event)
 {
-  if (roslib::LogConstPtr message = getSelectedMessage())
+  if (rosgraph_msgs::LogConstPtr message = getSelectedMessage())
   {
     addFilter(model_, message->name, RosoutTextFilter::Node, false, false);
   }
@@ -433,7 +433,7 @@ void RosoutListControl::onExcludeNode(wxCommandEvent& event)
 
 void RosoutListControl::onExcludeMessage(wxCommandEvent& event)
 {
-  if (roslib::LogConstPtr message = getSelectedMessage())
+  if (rosgraph_msgs::LogConstPtr message = getSelectedMessage())
   {
     addFilter(model_, message->msg, RosoutTextFilter::Message, false, false);
   }
@@ -441,7 +441,7 @@ void RosoutListControl::onExcludeMessage(wxCommandEvent& event)
 
 void RosoutListControl::onExcludeLocationNewWindow(wxCommandEvent& event)
 {
-  if (roslib::LogConstPtr message = getSelectedMessage())
+  if (rosgraph_msgs::LogConstPtr message = getSelectedMessage())
   {
     std::stringstream ss;
     ss << message->file << ":" << message->function << ":" << message->line;
@@ -451,7 +451,7 @@ void RosoutListControl::onExcludeLocationNewWindow(wxCommandEvent& event)
 
 void RosoutListControl::onExcludeNodeNewWindow(wxCommandEvent& event)
 {
-  if (roslib::LogConstPtr message = getSelectedMessage())
+  if (rosgraph_msgs::LogConstPtr message = getSelectedMessage())
   {
     addFilter(model_, message->name, RosoutTextFilter::Node, false, true);
   }
@@ -459,7 +459,7 @@ void RosoutListControl::onExcludeNodeNewWindow(wxCommandEvent& event)
 
 void RosoutListControl::onExcludeMessageNewWindow(wxCommandEvent& event)
 {
-  if (roslib::LogConstPtr message = getSelectedMessage())
+  if (rosgraph_msgs::LogConstPtr message = getSelectedMessage())
   {
     addFilter(model_, message->msg, RosoutTextFilter::Message, false, true);
   }
@@ -467,7 +467,7 @@ void RosoutListControl::onExcludeMessageNewWindow(wxCommandEvent& event)
 
 void RosoutListControl::onIncludeLocation(wxCommandEvent& event)
 {
-  if (roslib::LogConstPtr message = getSelectedMessage())
+  if (rosgraph_msgs::LogConstPtr message = getSelectedMessage())
   {
     std::stringstream ss;
     ss << message->file << ":" << message->function << ":" << message->line;
@@ -477,7 +477,7 @@ void RosoutListControl::onIncludeLocation(wxCommandEvent& event)
 
 void RosoutListControl::onIncludeNode(wxCommandEvent& event)
 {
-  if (roslib::LogConstPtr message = getSelectedMessage())
+  if (rosgraph_msgs::LogConstPtr message = getSelectedMessage())
   {
     addFilter(model_, message->name, RosoutTextFilter::Node, true, false);
   }
@@ -485,7 +485,7 @@ void RosoutListControl::onIncludeNode(wxCommandEvent& event)
 
 void RosoutListControl::onIncludeMessage(wxCommandEvent& event)
 {
-  if (roslib::LogConstPtr message = getSelectedMessage())
+  if (rosgraph_msgs::LogConstPtr message = getSelectedMessage())
   {
     addFilter(model_, message->msg, RosoutTextFilter::Message, true, false);
   }
@@ -493,7 +493,7 @@ void RosoutListControl::onIncludeMessage(wxCommandEvent& event)
 
 void RosoutListControl::onIncludeLocationNewWindow(wxCommandEvent& event)
 {
-  if (roslib::LogConstPtr message = getSelectedMessage())
+  if (rosgraph_msgs::LogConstPtr message = getSelectedMessage())
   {
     std::stringstream ss;
     ss << message->file << ":" << message->function << ":" << message->line;
@@ -503,7 +503,7 @@ void RosoutListControl::onIncludeLocationNewWindow(wxCommandEvent& event)
 
 void RosoutListControl::onIncludeNodeNewWindow(wxCommandEvent& event)
 {
-  if (roslib::LogConstPtr message = getSelectedMessage())
+  if (rosgraph_msgs::LogConstPtr message = getSelectedMessage())
   {
     addFilter(model_, message->name, RosoutTextFilter::Node, true, true);
   }
@@ -511,7 +511,7 @@ void RosoutListControl::onIncludeNodeNewWindow(wxCommandEvent& event)
 
 void RosoutListControl::onIncludeMessageNewWindow(wxCommandEvent& event)
 {
-  if (roslib::LogConstPtr message = getSelectedMessage())
+  if (rosgraph_msgs::LogConstPtr message = getSelectedMessage())
   {
     addFilter(model_, message->msg, RosoutTextFilter::Message, true, true);
   }
@@ -533,7 +533,7 @@ void RosoutListControl::copySelectionToClipboard(bool message_only)
       ss << std::endl << std::endl;
     }
 
-    roslib::LogConstPtr message = model_->getMessageByIndex(index);
+    rosgraph_msgs::LogConstPtr message = model_->getMessageByIndex(index);
     if (message)
     {
       if (message_only)
@@ -591,7 +591,7 @@ void RosoutListControl::onItemRightClick(wxListEvent& event)
   // Can only create new filters on 1 message at a time
   if (selection_.size() == 1)
   {
-    roslib::LogConstPtr message = model_->getMessageByIndex(event.GetIndex());
+    rosgraph_msgs::LogConstPtr message = model_->getMessageByIndex(event.GetIndex());
     if (message)
     {
       wxMenu* exclude_menu = new wxMenu(wxT(""));

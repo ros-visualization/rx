@@ -33,7 +33,7 @@
 #include <wx/wx.h>
 #include <wx/listctrl.h>
 
-#include "roslib/Log.h"
+#include "rosgraph_msgs/Log.h"
 
 #include <boost/function.hpp>
 
@@ -87,7 +87,7 @@ public:
    * @param message The message
    * @return A text representation of the severity (ie, "Debug", "Info"...)
    */
-  wxString getSeverityText(const roslib::LogConstPtr& message) const;
+  wxString getSeverityText(const rosgraph_msgs::LogConstPtr& message) const;
   /**
    * \brief Get the index of the currently selected item
    * @return The index of the currently selected item
@@ -107,7 +107,7 @@ public:
 
 protected:
 
-  roslib::LogConstPtr getSelectedMessage();
+  rosgraph_msgs::LogConstPtr getSelectedMessage();
   void updateSelection();
 
   // Callbacks

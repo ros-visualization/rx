@@ -15,6 +15,7 @@ Pieces of rxtools use some icons from the <a href="http://www.famfamfam.com/lab/
     <review status="Doc reviewed" notes=""/>
     <url>http://ros.org/wiki/rxtools</url>
     <depend package="roscpp"/>
+    <depend package="rosgraph_msgs"/>
     <depend package="roslib"/>        
     <depend package="rospy"/>        
     <depend package="wxswig"/>

@@ -38,13 +38,13 @@ def check_matplotlib_deps():
         import matplotlib
     except ImportError:
         print >> sys.stderr, """ERROR: rxplot requires matplotlib to run.
-Please type 'rosmake rosviz' to build rosviz and its dependencies."""
+Please type 'rosmake rxtools --rosdep-install'."""
         sys.exit(1)
     try:
         import numpy as np
     except ImportError:
         print >> sys.stderr, """ERROR: rxplot requires numpy to run.
-Please type 'rosmake rosviz' to build rosviz and its dependencies."""
+Please type 'rosmake rxtools --rosdep-install'."""
         sys.exit(1)
         
     from distutils.version import StrictVersion

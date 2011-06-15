@@ -65,6 +65,12 @@ def rxplot_main():
     parser.add_option("-b", "--buffer", type="int",
                       dest="buffer", default=-1,
                       help="set size of buffer in seconds (default of -1 keeps all data)")
+    parser.add_option("-r", "--refresh_rate", type="float",
+                      dest="redraw_period", default=2,
+                      help="set refresh rate (default 2hz)")
+    parser.add_option("-P", "--pause", action="store_true",
+                      dest="start_paused",
+                      help="start in paused state")
     parser.add_option("-M", "--mode",
                       dest="mode", default="2d",
                       help="options: \"2d\", \"3d\", or \"scatter\" [default=%default].  "

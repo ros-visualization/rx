@@ -1,0 +1,27 @@
+<launch>
+  <arg name="redraw_period" default="500"/>
+  <arg name="rxplot_basic_args" value="-p 60 -b 90 -m . -r $(arg redraw_period)"/>
+  <arg name="start_paused" default="false"/>
+  
+  <arg if="$(arg start_paused)" name="rxplot_args" 
+    value="$(arg rxplot_basic_args) -P"/>
+  <arg unless="$(arg start_paused)" name="rxplot_args" 
+    value="$(arg rxplot_basic_args)"/>
+
+  <arg name="rxplot_topics" default="
+      /data/vector/x:y:z
+      /data/vector/x:y
+      /data/vector/z"/>
+
+  <node pkg="rxtools" type="rxplot_stress_test_datagen.py" name="rxplot_stress_test_datagen"/>
+
+  <node pkg="rxtools" type="rxplot" name="plot1" args="$(arg rxplot_topics) $(arg rxplot_args)"/>
+  <node pkg="rxtools" type="rxplot" name="plot2" args="$(arg rxplot_topics) $(arg rxplot_args)"/>
+  <node pkg="rxtools" type="rxplot" name="plot3" args="$(arg rxplot_topics) $(arg rxplot_args)"/>
+  <node pkg="rxtools" type="rxplot" name="plot4" args="$(arg rxplot_topics) $(arg rxplot_args)"/>
+  <node pkg="rxtools" type="rxplot" name="plot5" args="$(arg rxplot_topics) $(arg rxplot_args)"/>
+  <node pkg="rxtools" type="rxplot" name="plot6" args="$(arg rxplot_topics) $(arg rxplot_args)"/>
+  <node pkg="rxtools" type="rxplot" name="plot7" args="$(arg rxplot_topics) $(arg rxplot_args)"/>
+  <node pkg="rxtools" type="rxplot" name="plot8" args="$(arg rxplot_topics) $(arg rxplot_args)"/>
+
+</launch>

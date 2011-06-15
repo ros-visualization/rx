@@ -162,7 +162,8 @@ class RxPlotFrame(wx.Frame):
         self.datagen = []
         self.datax = []
         self.datay = []
-        self.buffer_size = options.buffer        
+        self.buffer_size = options.buffer     
+        self.redraw_period = int(1. / options.refresh_rate * 1000) # convert to ms
         
         self.start_time = rospy.get_time()
         for topic_list in topics:
@@ -181,7 +182,9 @@ class RxPlotFrame(wx.Frame):
         self.Bind(wx.EVT_TIMER, self.on_redraw_timer, self.redraw_timer)
         
         #self.redraw_timer.Start(100)
-        self.redraw_timer.Start(500)
+        self.redraw_timer.Start(self.redraw_period)
+        if options.start_paused:
+            self.toolbar._on_pause(None)
 
     def create_menu(self):
         self.menubar = wx.MenuBar()

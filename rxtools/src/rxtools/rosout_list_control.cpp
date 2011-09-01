@@ -732,8 +732,10 @@ void RosoutListControl::postItemChanges()
   Thaw();
 
   // This for some reason prevents the control from flickering: http://wiki.wxwidgets.org/Flicker-Free_Drawing#No-flickering_for_wxListCtrl_with_wxLC_REPORT_.7C_wxLC_VIRTUAL_style
+#if wxMAJOR_VERSION == 2 and wxMINOR_VERSION == 8 // If wxWidgets 2.8.x
   wxIdleEvent idle;
   wxTheApp->SendIdleEvents(this, idle);
+#endif
 }
 
 void RosoutListControl::setSelection(const S_int32& sel)

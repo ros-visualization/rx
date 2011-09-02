@@ -32,12 +32,16 @@
 #
 # Revision $Id$
 
-WXVER = '2.8' 
+from __future__ import print_function
+
+import sys
+
+WXVER = ['2.8', '2.9']
 import wxversion 
 if wxversion.checkInstalled(WXVER): 
     wxversion.select(WXVER) 
-else: 
-    print >> sys.stderr, "This application requires wxPython version %s"%(WXVER) 
+else:
+    sys.stderr.write("This application requires wxPython version %s\n"%(WXVER))
     sys.exit(1) 
 import wx
 
@@ -134,6 +138,6 @@ def rxplot_main():
         # for now, cannot multigraph, so unify representation going into plot call
         topic_list = [[x] for x in print_topic_list]
 
-    print "plotting topics", ', '.join(print_topic_list)
+    print("plotting topics", ', '.join(print_topic_list))
 
     rxtools.rxplot.rxplot_app(topic_list, options)

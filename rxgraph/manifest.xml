@@ -6,7 +6,7 @@
   </description>
   <author>Ken Conley</author>
   <license>BSD</license>
-  <review status="unreviewed" notes=""/>
+  <review status="doc reviewed" notes="reviewed as part of rosgraph"/>
   <url>http://ros.org/wiki/rxgraph</url>
 
   <depend package="rosgraph"/>

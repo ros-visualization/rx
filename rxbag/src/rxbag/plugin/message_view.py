@@ -52,7 +52,6 @@ class MessageView(object):
         @param topic: the message topic
         @type  topic: str
         @param msg: the message
-        @type  msg: roslib.Message
         @param t: the message timestamp
         @type  t: rospy.Time
         """

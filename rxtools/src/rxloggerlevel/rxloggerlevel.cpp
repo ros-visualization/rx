@@ -56,6 +56,9 @@ public:
     ros::init(argc, 0, "rxloggerlevel", ros::init_options::AnonymousName | ros::init_options::NoSigintHandler);
 
     wxFrame* frame = new LoggerLevelFrame(NULL);
+    wxString title = wxString::FromAscii("rxloggerlevel  ");
+    title.Append(wxString::FromAscii(ros::master::getURI().c_str()));
+    frame->SetTitle(title);
     SetTopWindow(frame);
     frame->Show();
     frame->Raise();

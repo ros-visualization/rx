@@ -57,7 +57,7 @@ public:
     ros::init(argc, 0, "rxconsole", ros::init_options::AnonymousName | ros::init_options::NoSigintHandler);
 
     wxFrame* frame = new RosoutFrame(0);
-    wxString title = wxString::FromAscii("rxloggerlevel  ");
+    wxString title = wxString::FromAscii("rxconsole  ");
     title.Append(wxString::FromAscii(ros::master::getURI().c_str()));
     frame->SetTitle(title);
     SetTopWindow(frame);

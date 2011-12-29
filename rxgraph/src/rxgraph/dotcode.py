@@ -32,7 +32,7 @@
 #
 # Revision $Id$
 
-import roslib.names
+import rosgraph.names
 import rosgraph.impl.graph
 
 ORIENTATIONS = ['LR', 'TB', 'RL', 'BT']
@@ -101,7 +101,7 @@ def generate_namespaces(g, graph_mode, quiet=False):
         nodes = g.nn_nodes
         if quiet:
             nodes = [n for n in nodes if not n in QUIET_NAMES]
-        namespaces = list(set([roslib.names.namespace(n) for n in nodes]))
+        namespaces = list(set([rosgraph.names.namespace(n) for n in nodes]))
             
     elif graph_mode == NODE_TOPIC_GRAPH or \
              graph_mode == NODE_TOPIC_ALL_GRAPH:
@@ -111,11 +111,11 @@ def generate_namespaces(g, graph_mode, quiet=False):
             nn_nodes = [n for n in nn_nodes if not n in QUIET_NAMES]
             nt_nodes = [n for n in nt_nodes if not n in QUIET_NAMES]
         if nn_nodes or nt_nodes:
-            namespaces = [roslib.names.namespace(n) for n in nn_nodes]
+            namespaces = [rosgraph.names.namespace(n) for n in nn_nodes]
             # an annoyance with the rosgraph library is that it
             # prepends a space to topic names as they have to have
             # different graph node namees from nodes. we have to strip here
-            namespaces.extend([roslib.names.namespace(n[1:]) for n in nt_nodes])
+            namespaces.extend([rosgraph.names.namespace(n[1:]) for n in nt_nodes])
 
     return list(set(namespaces))
 

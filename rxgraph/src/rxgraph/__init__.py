@@ -32,8 +32,11 @@
 #
 # Revision $Id$
 
+from __future__ import print_function
+
 import roslib; roslib.load_manifest('rxgraph')
 
+import sys
 import rxgraph.impl
 from optparse import OptionParser
 
@@ -58,14 +61,14 @@ def rxgraph_main():
     try:
         subprocess.check_call(['dot', '-V'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except:
-        print >> sys.stderr, "Graphviz does not appear to be installed on your system. Please run:\n\n\trosdep install rosgraph\n\nto install the necessary dependencies on your system"
+        print("Graphviz does not appear to be installed on your system. Please run:\n\n\trosdep install rosgraph\n\nto install the necessary dependencies on your system",file=sys.stderr)
         sys.exit(1)
 
         
     # initialize logging libraries
     import logging
-    import roslib.roslogging
-    roslib.roslogging.configure_logging('rxgraph', logging.INFO)
+    import rosgraph.roslogging
+    rosgraph.roslogging.configure_logging('rxgraph', logging.INFO)
     try:
         import wx
         app = wx.App()    

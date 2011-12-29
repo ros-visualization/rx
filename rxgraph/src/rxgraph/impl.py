@@ -45,7 +45,6 @@ import rxgraph.dotcode
 from rxgraph.dotcode import generate_dotcode, generate_namespaces, NODE_NODE_GRAPH, NODE_TOPIC_GRAPH, NODE_TOPIC_ALL_GRAPH
 from rxgraph.viewer import RxGraphViewerFrame
 
-import roslib.scriptutil
 import rostopic
 import rosnode
 

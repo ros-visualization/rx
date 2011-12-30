@@ -45,19 +45,23 @@ import threading
 import time
 
 import roslib.message
-import roslib.scriptutil
-
+import rosgraph
 import rospy
 
 class RosPlotException(Exception): pass
 
-## subroutine for getting the topic type
-## (nearly identical to rostopic._get_topic_type, except it returns rest of name instead of fn)
-## @return str, str, str: topic type, real topic name, and rest of name referenced
-## if the \a topic points to a field within a topic, e.g. /rosout/msg
 def _get_topic_type(topic):
-    code, msg, val = roslib.scriptutil.get_master().getPublishedTopics('/', '/')
-    if code != 1:
+    """
+    subroutine for getting the topic type
+    (nearly identical to rostopic._get_topic_type, except it returns rest of name instead of fn)
+    
+    :returns: topic type, real topic name, and rest of name referenced
+      if the topic points to a field within a topic, e.g. /rosout/msg, ``str, str, str``
+    """
+    try:
+        master = rosgraph.Master('/rosplot')
+        val = master.getPublishedTopics('/')
+    except:
         raise RosPlotException("unable to get list of topics from master")
     matches = [(t, t_type) for t, t_type in val if t == topic or topic.startswith(t+'/')]
     if matches:
@@ -70,10 +74,13 @@ def _get_topic_type(topic):
     else:
         return None, None, None
 
-## get the topic type (nearly identical to rostopic.get_topic_type, except it doesn't return a fn)
-## @return str, str, str: topic type, real topic name, and rest of name referenced
-## if the \a topic points to a field within a topic, e.g. /rosout/msg
 def get_topic_type(topic):
+    """
+    Get the topic type (nearly identical to rostopic.get_topic_type, except it doesn't return a fn)
+    
+    :returns: topic type, real topic name, and rest of name referenced
+      if the \a topic points to a field within a topic, e.g. /rosout/msg, ``str, str, str``
+    """
     topic_type, real_topic, rest = _get_topic_type(topic)
     if topic_type:
         return topic_type, real_topic, rest
@@ -88,8 +95,10 @@ def get_topic_type(topic):
         return None, None, None
 
 
-## Subscriber to ROS topic that buffers incoming data
 class ROSData(object):
+    """
+    Subscriber to ROS topic that buffers incoming data
+    """
     
     def __init__(self, topic, start_time):
         self.name = topic
@@ -108,10 +117,11 @@ class ROSData(object):
     def close(self):
       self.sub.unregister()
 
-    ## ROS subscriber callback
-    ## @param self
-    ## @param msg        
     def _ros_cb(self, msg):
+        """
+        ROS subscriber callback
+        :param msg: ROS message data
+        """
         try:
             self.lock.acquire()
             try:
@@ -127,10 +137,12 @@ class ROSData(object):
         finally:
             self.lock.release()
         
-    ## Get the next data in the series
-    ## @param self
-    ## @return [xdata], [ydata]
     def next(self):
+        """
+        Get the next data in the series
+        
+        :returns: [xdata], [ydata]
+        """
         if self.error:
             raise self.error
         try:
@@ -173,17 +185,21 @@ def is_ros_pause():
 def is_ros_stop():
     return _stopped
 
-## @param str field_name: name of field to index into
-## @param str slot_num: index of slot to return
-## @return fn(msg_field)->msg_field[slot_num]
 def _array_eval(field_name, slot_num):
+    """
+    :param field_name: name of field to index into, ``str``
+    :param slot_num: index of slot to return, ``str``
+    :returns: fn(msg_field)->msg_field[slot_num]
+    """
     def fn(f):
         return getattr(f, field_name).__getitem__(slot_num)
     return fn
 
-## @param str field_name: name of field to return
-## @return fn(msg_field)->msg_field.field_name
 def _field_eval(field_name):
+    """
+    :param field_name: name of field to return, ``str``
+    :returns: fn(msg_field)->msg_field.field_name
+    """
     def fn(f):
         return getattr(f, field_name)
     return fn

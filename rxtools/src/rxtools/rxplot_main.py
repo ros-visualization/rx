@@ -45,8 +45,8 @@ else:
     sys.exit(1) 
 import wx
 
-import roslib.scriptutil
 import rospy
+import rosgraph.names
 
 import rxtools.rxplot
 
@@ -112,7 +112,7 @@ def rxplot_main():
                 c_topics.append(sub_t)
 
         # #1053: resolve command-line topic names
-        c_topics = [roslib.scriptutil.script_resolve_name('rxplot', n) for n in c_topics]
+        c_topics = [rosgraph.names.script_resolve_name('rxplot', n) for n in c_topics]
 
         topic_list.append(c_topics)
 

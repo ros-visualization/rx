@@ -30,16 +30,13 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-#
-# Revision $Id$
-
-from __future__ import with_statement
 
 import sys
 import time
 import threading
 import traceback
 
+import rosgraph
 import rosgraph.impl.graph
 import rxgraph.dotcode
 from rxgraph.dotcode import generate_dotcode, generate_namespaces, NODE_NODE_GRAPH, NODE_TOPIC_GRAPH, NODE_TOPIC_ALL_GRAPH
@@ -57,7 +54,7 @@ def get_info_text(selection_url):
     if selection_url.startswith('node:'):
         try:
             node_name = selection_url[5:]
-            master = roslib.scriptutil.get_master()
+            master = rosgraph.Master('/rxgraph')
             node_api = rosnode.get_api_uri(master, node_name)
             return rosnode.get_node_info_description(node_name) + rosnode.get_node_connection_info_description(node_api)
         except rosnode.ROSNodeException, e:

@@ -87,3 +87,13 @@ target_link_libraries(rxloggerlevel ${PROJECT_NAME})
 install(FILES scripts/rxplot
   DESTINATION share/rxplot/bin
   )
+install(TARGETS
+  rxloggerlevel rxconsole
+  RUNTIME DESTINATION bin
+  )
+install(TARGETS
+  rxloggerlevel rxconsole
+  RUNTIME DESTINATION share/rxtools/bin
+  )
+
+

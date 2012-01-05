@@ -34,14 +34,9 @@
 The rxbag timeline control.
 """
 
-from __future__ import with_statement
-
-PKG = 'rxbag'
-import roslib; roslib.load_manifest(PKG)
 import rospy
 
 import rosbag
-import rosgraph.masterapi
 
 import bisect
 import collections

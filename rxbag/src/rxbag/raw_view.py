@@ -34,9 +34,6 @@
 Defines a raw view: a TopicMessageView that displays the message contents in a tree.
 """
 
-PKG = 'rxbag'
-import roslib; roslib.load_manifest(PKG)
-
 import codecs
 import math
 

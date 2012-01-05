@@ -34,11 +34,13 @@
 
 from __future__ import print_function
 
-import roslib; roslib.load_manifest('rxgraph')
-
+import logging
 import sys
-import rxgraph.impl
+import subprocess
 from optparse import OptionParser
+
+import rxgraph.impl
+import rosgraph.roslogging
 
 def rxgraph_main():
     parser = OptionParser(usage="usage: rxgraph [options]")
@@ -57,7 +59,6 @@ def rxgraph_main():
         parser.error("invalid arguments")
 
 
-    import subprocess
     try:
         subprocess.check_call(['dot', '-V'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except:
@@ -66,8 +67,6 @@ def rxgraph_main():
 
         
     # initialize logging libraries
-    import logging
-    import rosgraph.roslogging
     rosgraph.roslogging.configure_logging('rxgraph', logging.INFO)
     try:
         import wx

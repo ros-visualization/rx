@@ -35,8 +35,6 @@
 The main entry-point to rxbag.
 """
 
-PKG = 'rxbag'
-import roslib; roslib.load_manifest(PKG)
 import rospy
 
 import optparse

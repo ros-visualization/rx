@@ -30,8 +30,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-PKG = 'rxbag'
-import roslib; roslib.load_manifest(PKG)
+import roslib.packages
 
 import wx
 
@@ -124,7 +123,7 @@ class TopicMessageView(MessageView):
     def _setup_toolbar(self):
         self._toolbar.ClearTools()
         
-        icons_dir = roslib.packages.get_pkg_dir(PKG) + '/icons/'
+        icons_dir = roslib.packages.get_pkg_dir('rxbag') + '/icons/'
 
         navigate_first_tool    = self._toolbar.AddLabelTool(wx.ID_ANY, '', wx.Bitmap(icons_dir + 'navigate_first.png'),    shortHelp='First message',    longHelp='Move playhead to first message on topic')
         navigate_previous_tool = self._toolbar.AddLabelTool(wx.ID_ANY, '', wx.Bitmap(icons_dir + 'navigate_previous.png'), shortHelp='Previous message', longHelp='Move playhead to previous message on topic')

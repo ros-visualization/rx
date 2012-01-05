@@ -34,13 +34,13 @@
 Loads plugins.
 """
 
-PKG = 'rxbag'
-import roslib; roslib.load_manifest(PKG)
+from __future__ import print_function
 
 import sys
 import traceback
 
-import roslib.rospack
+import roslib
+import rospkg
 
 def load_plugins():
     """
@@ -51,18 +51,17 @@ def load_plugins():
     """
     plugins = []
 
-    to_check = roslib.rospack.rospack_depends_on_1('rxbag')
+    rospack = rospkg.RosPack()
+    to_check = rospack.get_depends_on('rxbag', implicit=False)
 
     for pkg in to_check:
-        manifest_file = roslib.manifest.manifest_file(pkg, True)
-        manifest      = roslib.manifest.parse_file(manifest_file)
-
+        manifest = rospack.get_manifest(pkg)
         plugin_module_names = manifest.get_export('rxbag', 'plugin')
 
         if not plugin_module_names:
             continue
         elif len(plugin_module_names) != 1:
-            print >> sys.stderr, "Cannot load plugin [%s]: invalid 'plugin' attribute" % (pkg)
+            print("Cannot load plugin [%s]: invalid 'plugin' attribute" % (pkg), file=sys.stderr)
             continue
         plugin_module_name = plugin_module_names[0]
 
@@ -84,9 +83,9 @@ def load_plugins():
             if plugins_func:
                 plugins.extend(plugins_func())
             else:
-                print >> sys.stderr, "Cannot load plugin [%s]: no 'get_rxbag_plugins' attribute" % (plugin_module_name)
+                print("Cannot load plugin [%s]: no 'get_rxbag_plugins' attribute" % (plugin_module_name), file= >> sys.stderr)
 
-        except Exception, ex:
-            print >> sys.stderr, "Unable to load plugin [%s] from package [%s]:\n%s" % (plugin_module_name, pkg, traceback.format_exc())
+        except Exception as ex:
+            print("Unable to load plugin [%s] from package [%s]:\n%s" % (plugin_module_name, pkg, traceback.format_exc()), file=sys.stderr)
 
     return plugins

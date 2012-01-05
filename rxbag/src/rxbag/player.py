@@ -34,13 +34,9 @@
 Player listens to messages from the timeline and publishes them to ROS.
 """
 
-PKG = 'rxbag'
-import roslib; roslib.load_manifest(PKG)
-
 import wx
 
 import rosbag
-import rosgraph.masterapi
 import rospy
 
 class Player(object):

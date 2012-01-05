@@ -34,18 +34,13 @@
 Recorder subscribes to ROS messages and writes them to a bag file.
 """
 
-from __future__ import with_statement
-
-PKG = 'rxbag'
-import roslib; roslib.load_manifest(PKG)
-
 import Queue
 import re
 import threading
 import time
 
 import rosbag
-import rosgraph.masterapi
+import rosgraph
 import rospy
 
 import sys
@@ -134,7 +129,7 @@ class Recorder(object):
     ## Implementation
 
     def _run_master_check(self):
-        master = rosgraph.masterapi.Master('rxbag.recorder')
+        master = rosgraph.Master('rxbag_recorder')
 
         try:
             while not self._stop_flag:

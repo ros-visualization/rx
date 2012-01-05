@@ -34,9 +34,6 @@
 Helper functions for bag files and timestamps.
 """
 
-PKG = 'rxbag'
-import roslib; roslib.load_manifest(PKG)
-
 import time
 
 import rospy

@@ -8,17 +8,20 @@ sys.path.insert(0, 'src')
 setup(name='rx',
       version= '1.7.0',
       packages=[
+          'rxbag',
           'rxgraph',
           'rxtools',
           'xdot',
                 ],
       package_dir = {
+          'rxbag':'rxbag/src/rxbag',
           'rxgraph':'rxgraph/src/rxgraph',
           'rxtools':'rxtools/src/rxtools',
           'xdot':'xdot/src/xdot',
                      },
       install_requires=['rospkg', 'roslib', 'ros_comm'],
       scripts = [
+          'rxbag/scripts/rxbag',
           'rxgraph/scripts/rxgraph',
           'rxtools/scripts/rxplot',
                  ],

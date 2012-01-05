@@ -83,7 +83,7 @@ def load_plugins():
             if plugins_func:
                 plugins.extend(plugins_func())
             else:
-                print("Cannot load plugin [%s]: no 'get_rxbag_plugins' attribute" % (plugin_module_name), file= >> sys.stderr)
+                print("Cannot load plugin [%s]: no 'get_rxbag_plugins' attribute" % (plugin_module_name), file=sys.stderr)
 
         except Exception as ex:
             print("Unable to load plugin [%s] from package [%s]:\n%s" % (plugin_module_name, pkg, traceback.format_exc()), file=sys.stderr)

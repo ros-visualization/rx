@@ -71,7 +71,7 @@ uint32_t RosoutSetupDialog::getBufferSize()
 
 void RosoutSetupDialog::onTopicBrowse(wxCommandEvent& event)
 {
-  TopicDisplayDialog dialog(this, false, rosgraph_msgs::Log::__s_getDataType());
+  TopicDisplayDialog dialog(this, false, ros::message_traits::DataType<rosgraph_msgs::Log>::value());
   if (dialog.ShowModal() == wxID_OK)
   {
     std::vector<std::string> selection;

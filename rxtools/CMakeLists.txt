@@ -1,8 +1,15 @@
-cmake_minimum_required(VERSION 2.4.6)
-include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
-rosbuild_init()
+cmake_minimum_required(VERSION 2.8)
+project(rxtools)
 
-rosbuild_add_boost_directories()
+find_package(ROS REQUIRED COMPONENTS
+  catkin rosconsole roscpp roslib rostime xmlrpcpp wxPython_swig_interface wxswig
+  )
+include_directories(${ROS_INCLUDE_DIRS})
+
+find_package(Boost REQUIRED COMPONENTS thread regex)
+include_directories(${Boost_INCLUDE_DIRS})
+
+include_directories(include)
 
 find_package(wxWidgets REQUIRED)
 
@@ -16,50 +23,38 @@ include_directories(${wxWidgets_INCLUDE_DIRS})
 find_package(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_PATH})
 
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
 # shared library (for C++)
-rosbuild_add_library(${PROJECT_NAME} src/rxtools/topic_display.cpp
-                                    src/rxtools/topic_display_generated.cpp
-        				                    src/rxtools/topic_display_dialog.cpp
-        				                    src/rxtools/rosout_generated.cpp 
-                                    src/rxtools/rosout_panel.cpp
-                                    src/rxtools/rosout_filter.cpp
-                                    src/rxtools/rosout_text_filter.cpp
-                                    src/rxtools/rosout_text_filter_control.cpp
-                                    src/rxtools/rosout_severity_filter.cpp
-                                    src/rxtools/rosout_severity_filter_control.cpp
-                                    src/rxtools/rosout_list_control.cpp
-                                    src/rxtools/rosout_setup_dialog.cpp
-                                    src/rxtools/logger_level_panel.cpp
-                                    src/rxtools/init_roscpp.cpp)
-target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES})
-rosbuild_link_boost(${PROJECT_NAME} thread regex)
-
-# Find the combined swig flags for this project
-rosbuild_invoke_rospack(${PROJECT_NAME} ${PROJECT_NAME} SWIG_FLAGS "export" "--lang=swig" "--attrib=flags")
-set(SWIG_FLAGS ${${PROJECT_NAME}_SWIG_FLAGS})
+add_library(${PROJECT_NAME} src/rxtools/topic_display.cpp
+                            src/rxtools/topic_display_generated.cpp
+                            src/rxtools/topic_display_dialog.cpp
+                            src/rxtools/rosout_generated.cpp 
+                            src/rxtools/rosout_panel.cpp
+                            src/rxtools/rosout_filter.cpp
+                            src/rxtools/rosout_text_filter.cpp
+                            src/rxtools/rosout_text_filter_control.cpp
+                            src/rxtools/rosout_severity_filter.cpp
+                            src/rxtools/rosout_severity_filter_control.cpp
+                            src/rxtools/rosout_list_control.cpp
+                            src/rxtools/rosout_setup_dialog.cpp
+                            src/rxtools/logger_level_panel.cpp
+                            src/rxtools/init_roscpp.cpp)
+target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES})
 
 # Find the wxswig executable
-rosbuild_find_ros_package(wxswig)
-set(WXSWIG_EXECUTABLE ${wxswig_PACKAGE_PATH}/bin/swig)
+set(WXSWIG_EXECUTABLE ${PROJECT_BINARY_DIR}/../wxswig/bin/swig)
 
 # Add a custom command for generating the swig output files
 set(SWIG_INTERFACE_FILE ${PROJECT_SOURCE_DIR}/src/rxtools/rxtools.i)
-set(SWIG_OUTPUT_PYTHON_FILE ${PROJECT_SOURCE_DIR}/lib/rxtoolscpp.py)
+set(SWIG_OUTPUT_PYTHON_FILE ${PROJECT_BINARY_DIR}/rxtoolscpp.py)
 
-# Deal with CMake 2.4 vs. 2.6
-if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 2.4)   # CMake 2.6
-  set(SWIG_OUTPUT_CPP_FILE ${PROJECT_SOURCE_DIR}/src/rxtools/rosout_panel_swig_generated.cpp)
-  set(SWIG_COMMAND ${WXSWIG_EXECUTABLE} ${SWIG_FLAGS} -o ${SWIG_OUTPUT_CPP_FILE} -outdir ../lib -module rxtoolscpp ${SWIG_INTERFACE_FILE})
-else("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 2.4)    # CMake 2.4
-  set(SWIG_OUTPUT_CPP_FILE src/rxtools/rosout_panel_swig_generated.cpp)
-  set(SWIG_COMMAND ${WXSWIG_EXECUTABLE} ${SWIG_FLAGS} -o ../${SWIG_OUTPUT_CPP_FILE} -outdir ../lib -module rxtoolscpp ${SWIG_INTERFACE_FILE})
-endif("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 2.4)
+set(SWIG_OUTPUT_CPP_FILE ${PROJECT_BINARY_DIR}/rosout_panel_swig_generated.cpp)
+message("SWIG_COMMAND ${WXSWIG_EXECUTABLE} ${wxpython_swig_interface_SWIG_FLAGS} ${wxswig_SWIG_FLAGS} -o ${SWIG_OUTPUT_CPP_FILE} -outdir ${PROJECT_BINARY_DIR} -module rxtoolscpp ${SWIG_INTERFACE_FILE}")
+set(SWIG_COMMAND ${WXSWIG_EXECUTABLE} ${wxpython_swig_interface_SWIG_FLAGS} ${wxswig_SWIG_FLAGS} -o ${SWIG_OUTPUT_CPP_FILE} -outdir ${PROJECT_BINARY_DIR} -module rxtoolscpp ${SWIG_INTERFACE_FILE})
 
 set_source_files_properties(${SWIG_OUTPUT_CPP_FILE} PROPERTIES GENERATED true)
+set_source_files_properties(${SWIG_OUTPUT_PYTHON_FILE} PROPERTIES GENERATED true)
 add_custom_command(OUTPUT   ${SWIG_OUTPUT_CPP_FILE} 
                             ${SWIG_OUTPUT_PYTHON_FILE}
                    COMMAND  ${SWIG_COMMAND}
@@ -67,22 +62,37 @@ add_custom_command(OUTPUT   ${SWIG_OUTPUT_CPP_FILE}
                             src/rxtools/rosout_generated.h
                             src/rxtools/rosout_panel.h
                             src/rxtools/init_roscpp.h)
-                            
+
 # We add src/wx_rosout to the include list so that
 # ogre_tools_swig_generated.cpp can find its headers.  This is part of a
 # workaround for a deficiency in CMake 2.4's handling of generated sources.
 include_directories(${PROJECT_SOURCE_DIR}/src/rxtools)
 # shared library (with SWIG)
-rosbuild_add_swigpy_library(python_${PROJECT_NAME} ${PROJECT_NAME}cpp ${SWIG_OUTPUT_CPP_FILE})
+add_library(python_${PROJECT_NAME} ${SWIG_OUTPUT_CPP_FILE})
+# swig python needs a shared library named _<modulename>.[so|dll|...]
+# this renames the output file to conform to that by prepending
+# an underscore in place of the "lib" prefix.
+# If on Darwin, force the suffix so ".so", because the MacPorts
+# version of Python won't find _foo.dylib for 'import _foo'
+if(APPLE)
+  set_target_properties(python_${PROJECT_NAME}
+                        PROPERTIES OUTPUT_NAME ${PROJECT_NAME}cpp
+                        PREFIX "_" SUFFIX ".so")
+else(APPLE)
+  set_target_properties(python_${PROJECT_NAME}
+                        PROPERTIES OUTPUT_NAME ${PROJECT_NAME}cpp
+                        PREFIX "_")
+endif(APPLE)
+
 target_link_libraries(python_${PROJECT_NAME} ${PROJECT_NAME} ${PYTHON_LIBRARIES})
 
 #rxconsole binary
-rosbuild_add_executable(rxconsole src/rxconsole/rxconsole.cpp)
-target_link_libraries(rxconsole ${PROJECT_NAME})
+add_executable(rxconsole src/rxconsole/rxconsole.cpp)
+target_link_libraries(rxconsole ${PROJECT_NAME} ${ROS_LIBRARIES})
 
 #rxloggerlevel binary
-rosbuild_add_executable(rxloggerlevel src/rxloggerlevel/rxloggerlevel.cpp)
-target_link_libraries(rxloggerlevel ${PROJECT_NAME})
+add_executable(rxloggerlevel src/rxloggerlevel/rxloggerlevel.cpp)
+target_link_libraries(rxloggerlevel ${PROJECT_NAME} ${ROS_LIBRARIES})
 
 install(FILES scripts/rxplot
   DESTINATION share/rxplot/bin
@@ -95,5 +105,7 @@ install(TARGETS
   rxloggerlevel rxconsole
   RUNTIME DESTINATION share/rxtools/bin
   )
-
+install(DIRECTORY icons
+  DESTINATION share/rxtools/
+  )
 

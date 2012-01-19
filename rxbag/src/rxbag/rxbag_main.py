@@ -35,6 +35,7 @@
 The main entry-point to rxbag.
 """
 
+import roslib.message
 import rospy
 
 import optparse

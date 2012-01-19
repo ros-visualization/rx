@@ -10,7 +10,7 @@ include $(shell rospack find mk)/download_unpack_build.mk
 
 UNAME := $(shell uname)
 
-WXSWIG_CONFIGURE_PARAMS = --prefix=$(shell rospack find wxswig)
+WXSWIG_CONFIGURE_PARAMS = --prefix=$(CURDIR)/..
 ifeq ($(UNAME), Darwin)
 WXSWIG_CONFIGURE_PARAMS += --disable-dependency-tracking
 endif
@@ -25,8 +25,8 @@ ifneq ($(MAKE),)
 else
 	cd $(SOURCE_DIR) && ./configure $(WXSWIG_CONFIGURE_PARAMS) && make $(ROS_PARALLEL_JOBS) && make install
 endif
-	mv bin/swig bin/swig-real
-	cp swig-wrap bin/swig
+	mv $(SOURCE_DIR)/swig ../bin/swig-real
+	cp swig-wrap ../bin/swig
 	touch wxswig
 
 clean:

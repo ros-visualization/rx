@@ -79,7 +79,7 @@ RosoutPanel::RosoutPanel(wxWindow* parent, int id, wxPoint pos, wxSize size, int
   setTopic("/rosout_agg");
   setEnabled(true);
 
-  std::string icon_path = ros::package::getPath(ROS_PACKAGE_NAME) + "/icons/";
+  std::string icon_path = ros::package::getPath("rxtools") + "/icons/";
   delete_filter_bitmap_ = wxBitmap(wxString::FromAscii((icon_path + "delete-filter-16.png").c_str()), wxBITMAP_TYPE_PNG);
 
   wxBitmap add_bitmap(wxString::FromAscii((icon_path + "add-16.png").c_str()), wxBITMAP_TYPE_PNG);

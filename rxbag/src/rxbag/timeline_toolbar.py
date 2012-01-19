@@ -30,6 +30,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import roslib.packages
+
 import wx
 
 class TimelineToolBar(wx.ToolBar):
@@ -52,7 +54,7 @@ class TimelineToolBar(wx.ToolBar):
 
         self.ClearTools()
         
-        icons_dir = roslib.packages.get_pkg_dir(PKG) + '/icons/'
+        icons_dir = roslib.packages.get_pkg_dir('rxbag') + '/icons/'
         
         start_icon       = wx.Bitmap(icons_dir + 'start.png')
         rewind_icon      = wx.Bitmap(icons_dir + 'rewind.png')

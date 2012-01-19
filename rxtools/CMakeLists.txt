@@ -13,10 +13,6 @@ include_directories(include)
 
 find_package(wxWidgets REQUIRED)
 
-if(NOT wxWidgets_FOUND)
-message(FATAL_ERROR "wxWidgets not found!  Aborting...")
-endif(NOT wxWidgets_FOUND)
-
 include(${wxWidgets_USE_FILE})
 include_directories(${wxWidgets_INCLUDE_DIRS})
 
@@ -50,7 +46,6 @@ set(SWIG_INTERFACE_FILE ${PROJECT_SOURCE_DIR}/src/rxtools/rxtools.i)
 set(SWIG_OUTPUT_PYTHON_FILE ${PROJECT_BINARY_DIR}/rxtoolscpp.py)
 
 set(SWIG_OUTPUT_CPP_FILE ${PROJECT_BINARY_DIR}/rosout_panel_swig_generated.cpp)
-message("SWIG_COMMAND ${WXSWIG_EXECUTABLE} ${wxpython_swig_interface_SWIG_FLAGS} ${wxswig_SWIG_FLAGS} -o ${SWIG_OUTPUT_CPP_FILE} -outdir ${PROJECT_BINARY_DIR} -module rxtoolscpp ${SWIG_INTERFACE_FILE}")
 set(SWIG_COMMAND ${WXSWIG_EXECUTABLE} ${wxpython_swig_interface_SWIG_FLAGS} ${wxswig_SWIG_FLAGS} -o ${SWIG_OUTPUT_CPP_FILE} -outdir ${PROJECT_BINARY_DIR} -module rxtoolscpp ${SWIG_INTERFACE_FILE})
 
 set_source_files_properties(${SWIG_OUTPUT_CPP_FILE} PROPERTIES GENERATED true)

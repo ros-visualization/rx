@@ -1,6 +1,6 @@
 Catkin-ProjectName: rx
 Version: 1.7.0
-Depends: catkin, ros_comm
+Depends: catkin, ros_comm, rospack
 Description: GUI tools for ROS - rxbag, rxplot, rxgraph, and others
 Author: Ken Conley et al
 Maintainer: Ken Conley <kwc@willowgarage.com>

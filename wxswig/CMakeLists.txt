@@ -21,7 +21,7 @@ file(COPY Makefile md5.checksum swig-wrap
 )
 
 add_custom_target(external_make ALL
-    COMMAND make -f ${PROJECT_BINARY_DIR}/external_make/Makefile
+    COMMAND ${CMAKE_BINARY_DIR}/env.sh make -f ${PROJECT_BINARY_DIR}/external_make/Makefile
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/external_make
 )
 

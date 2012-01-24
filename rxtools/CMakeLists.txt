@@ -6,7 +6,7 @@ find_package(ROS REQUIRED COMPONENTS
   )
 include_directories(${ROS_INCLUDE_DIRS})
 
-find_package(Boost REQUIRED COMPONENTS thread regex)
+find_package(Boost REQUIRED COMPONENTS thread regex signals)
 include_directories(${Boost_INCLUDE_DIRS})
 
 include_directories(include)

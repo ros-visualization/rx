@@ -1,3 +1,0 @@
-set(@PACKAGE_NAME@_CPP_CFLAGS "-DSWIG_TYPE_TABLE=_wxPython_table -DWXP_USE_THREAD=1")
-set(@PACKAGE_NAME@_SWIG_FLAGS "-c++ -Wall -python -modern -new_repr -keyword -fastdispatch -fvirtual -fastinit -fastunpack @WX_CONFIG_CPPFLAGS@ @wxPython_swig_interface_SWIG_FLAGS@ -DSWIG_TYPE_TABLE=_wxPython_table -DWXP_USE_THREAD=1")
-

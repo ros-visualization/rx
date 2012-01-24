@@ -1,2 +1,0 @@
-#!/bin/sh
-SWIG_LIB=`dirname $0`/../share/swig/1.3.29 `dirname $0`/swig-real $@

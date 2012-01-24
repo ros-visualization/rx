@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(rxtools)
 
 find_package(ROS REQUIRED COMPONENTS
-  catkin rosconsole roscpp roslib rostime xmlrpcpp wxPython_swig_interface wxswig
+  catkin rosconsole roscpp roslib rostime xmlrpcpp wxPython_swig_interface
   )
 include_directories(${ROS_INCLUDE_DIRS})
 
@@ -12,9 +12,14 @@ include_directories(${Boost_INCLUDE_DIRS})
 include_directories(include)
 
 find_package(wxWidgets REQUIRED)
-
 include(${wxWidgets_USE_FILE})
 include_directories(${wxWidgets_INCLUDE_DIRS})
+
+# Find the wx-enhanced swig executable
+find_program(swigwx_BIN "swig" PATHS ${CMAKE_INSTALL_PREFIX}/bin)
+if(${swigwx_BIN} STREQUAL "swigwx_BIN-NOTFOUND")
+  message(FATAL_ERROR "wx-enhanced swig binary not found.  Aborting...")
+endif()
 
 find_package(PythonLibs REQUIRED)
 include_directories(${PYTHON_INCLUDE_PATH})
@@ -38,15 +43,24 @@ add_library(${PROJECT_NAME} src/rxtools/topic_display.cpp
                             src/rxtools/init_roscpp.cpp)
 target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES})
 
-# Find the wxswig executable
-set(WXSWIG_EXECUTABLE ${PROJECT_BINARY_DIR}/../wxswig/bin/swig)
+# Find the cpp-flags for wx which are used in CFG_EXTRAS
+find_program(WX_CONFIG_BIN wx-config)
+if(WX_CONFIG_BIN-NOTFOUND)
+    message(FATAL_ERROR "wx-config not found!  Aborting...")
+endif()
+execute_process(COMMAND ${WX_CONFIG_BIN} --cppflags
+                OUTPUT_VARIABLE WX_CONFIG_CPPFLAGS)
+# strip newline from the end
+string(REGEX REPLACE "\r?\n$" "" WX_CONFIG_CPPFLAGS "${WX_CONFIG_CPPFLAGS}")
 
 # Add a custom command for generating the swig output files
+set(SWIG_FLAGS -c++ -Wall -python -modern -new_repr -keyword -fastdispatch -fvirtual -fastinit -fastunpack ${WX_CONFIG_CPPFLAGS} -DSWIG_TYPE_TABLE=_wxPython_table -DWXP_USE_THREAD=1)
+
 set(SWIG_INTERFACE_FILE ${PROJECT_SOURCE_DIR}/src/rxtools/rxtools.i)
 set(SWIG_OUTPUT_PYTHON_FILE ${PROJECT_BINARY_DIR}/rxtoolscpp.py)
 
 set(SWIG_OUTPUT_CPP_FILE ${PROJECT_BINARY_DIR}/rosout_panel_swig_generated.cpp)
-set(SWIG_COMMAND ${WXSWIG_EXECUTABLE} ${wxpython_swig_interface_SWIG_FLAGS} ${wxswig_SWIG_FLAGS} -o ${SWIG_OUTPUT_CPP_FILE} -outdir ${PROJECT_BINARY_DIR} -module rxtoolscpp ${SWIG_INTERFACE_FILE})
+set(SWIG_COMMAND ${swigwx_BIN} ${SWIG_FLAGS} ${wxPython_swig_interface_SWIG_FLAGS} -o ${SWIG_OUTPUT_CPP_FILE} -outdir ${PROJECT_BINARY_DIR} -module rxtoolscpp ${SWIG_INTERFACE_FILE})
 
 set_source_files_properties(${SWIG_OUTPUT_CPP_FILE} PROPERTIES GENERATED true)
 set_source_files_properties(${SWIG_OUTPUT_PYTHON_FILE} PROPERTIES GENERATED true)
@@ -69,14 +83,12 @@ add_library(python_${PROJECT_NAME} ${SWIG_OUTPUT_CPP_FILE})
 # an underscore in place of the "lib" prefix.
 # If on Darwin, force the suffix so ".so", because the MacPorts
 # version of Python won't find _foo.dylib for 'import _foo'
+set_target_properties(python_${PROJECT_NAME}
+                      PROPERTIES OUTPUT_NAME ${PROJECT_NAME}cpp
+                      PREFIX "_")
 if(APPLE)
   set_target_properties(python_${PROJECT_NAME}
-                        PROPERTIES OUTPUT_NAME ${PROJECT_NAME}cpp
-                        PREFIX "_" SUFFIX ".so")
-else(APPLE)
-  set_target_properties(python_${PROJECT_NAME}
-                        PROPERTIES OUTPUT_NAME ${PROJECT_NAME}cpp
-                        PREFIX "_")
+                        PROPERTIES SUFFIX ".so")
 endif(APPLE)
 
 target_link_libraries(python_${PROJECT_NAME} ${PROJECT_NAME} ${PYTHON_LIBRARIES})

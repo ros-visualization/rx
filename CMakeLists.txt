@@ -1,30 +1,25 @@
 cmake_minimum_required(VERSION 2.8)
 project(rx)
 
-find_package(wxWidgets)
+find_package(catkin REQUIRED)
 
-if(NOT wxWidgets_FOUND)
-    message(WARNING "wxWidgets not found!  Skipping rx stack...")
-else()
-    find_package(catkin)
+catkin_export_python()
 
-    catkin_export_python()
+find_package(wxWidgets REQUIRED)
 
-    foreach(subdir
-        xdot
-        rxgraph
-        wxPython_swig_interface
-        wxswig
-        rxtools
-        rxbag
-        )
-      add_subdirectory(${subdir})
-    endforeach()
+foreach(subdir
+    xdot
+    rxgraph
+    wxPython_swig_interface
+    rxtools
+    rxbag
+    )
+  add_subdirectory(${subdir})
+endforeach()
 
-    # install all manifests
-    install_matching_to_share(manifest.xml)
+# install all manifests
+install_matching_to_share(manifest.xml)
 
-    install(FILES stack.xml
-            DESTINATION share/rx)
-endif()
+install(FILES stack.xml
+        DESTINATION share/rx)
 

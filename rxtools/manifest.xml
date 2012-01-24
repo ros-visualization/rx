@@ -18,7 +18,6 @@ Pieces of rxtools use some icons from the <a href="http://www.famfamfam.com/lab/
     <depend package="rosgraph_msgs"/>
     <depend package="roslib"/>        
     <depend package="rospy"/>        
-    <depend package="wxswig"/>
     <depend package="wxPython_swig_interface"/>
     <export> 
         <cpp cflags="-I${prefix}/src/ `rosboost-cfg --cflags`" lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lrxtools `rosboost-cfg --lflags thread,regex`"/>
@@ -26,6 +25,7 @@ Pieces of rxtools use some icons from the <a href="http://www.famfamfam.com/lab/
     </export>
 
     <rosdep name="wxwidgets"/>
+    <rosdep name="swig-wx"/>
 
     <!-- rxplot-specific -->
     <rosdep name="python-gtk2"/>

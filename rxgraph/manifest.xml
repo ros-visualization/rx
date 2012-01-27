@@ -1,4 +1,5 @@
 <package>
+  <catkin/>
   <description brief="rxgraph">
 
      rxgraph is a command-line tool for visualizing a ROS computation graph. The rxgraph is a new package in ROS 1.1 that provides an updated version of the rxgraph tool that was originally distributed in the rosgraph package.

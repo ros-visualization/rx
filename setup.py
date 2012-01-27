@@ -6,7 +6,7 @@ import sys
 sys.path.insert(0, 'src')
 
 setup(name='rx',
-      version= '1.7.0',
+      version= '1.7.1',
       packages=[
           'rxbag',
           'rxbag.plugin',

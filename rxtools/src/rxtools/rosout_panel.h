@@ -48,6 +48,7 @@
 #include <set>
 
 #include "boost/thread/mutex.hpp"
+#include <boost/thread/thread.hpp>
 
 class wxTimer;
 class wxTimerEvent;
@@ -59,6 +60,7 @@ class wxBitmapButton;
 class wxCheckBox;
 class wxWindow;
 class wxPanel;
+class wxEvent;
 
 namespace rxtools
 {
@@ -185,7 +187,7 @@ protected:
   void onLoggerLevelsClose(wxCloseEvent& event);
 
   /**
-   * \brief (wx callback) Called every 100ms so we can process new messages
+   * \brief (wx callback) Called every 250ms so we can process new messages
    */
   void onProcessTimer(wxTimerEvent& evt);
 
@@ -286,6 +288,17 @@ protected:
   bool pause_;
 
   LoggerLevelFrame* logger_level_frame_;
+
+  void checkForMaster();
+
+  bool connected_; ///< Are we connected to master?
+  boost::thread* check_master_thread_; ///< Thread used to periodically check for master
+  bool shutdown_thread_; ///< Should the thread terminate?
+
+  const int RECONNECTED_TO_MASTER_EVENT_;
+  const int DISCONNECTED_FROM_MASTER_EVENT_;
+  void onMasterReconnected(wxEvent& event);
+  void onMasterDisconnected(wxEvent& event);
 };
 
 } // namespace rxtools

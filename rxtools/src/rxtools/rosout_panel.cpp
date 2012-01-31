@@ -64,10 +64,18 @@ RosoutPanel::RosoutPanel(wxWindow* parent, int id, wxPoint pos, wxSize size, int
 , refilter_timer_(0.0f)
 , pause_(false)
 , logger_level_frame_(0)
+, connected_(true)
+, shutdown_thread_(false)
+, RECONNECTED_TO_MASTER_EVENT_(wxNewEventType())
+, DISCONNECTED_FROM_MASTER_EVENT_(wxNewEventType())
 {
   wxInitAllImageHandlers();
 
   nh_.setCallbackQueue(&callback_queue_);
+
+  Connect(RECONNECTED_TO_MASTER_EVENT_, (wxObjectEventFunction)&RosoutPanel::onMasterReconnected, 0, this);
+  Connect(DISCONNECTED_FROM_MASTER_EVENT_, (wxObjectEventFunction)&RosoutPanel::onMasterDisconnected, 0, this);
+  check_master_thread_ = new boost::thread(boost::bind(&RosoutPanel::checkForMaster, this));
 
   process_timer_ = new wxTimer(this);
   process_timer_->Start(250);
@@ -102,6 +110,10 @@ RosoutPanel::RosoutPanel(wxWindow* parent, int id, wxPoint pos, wxSize size, int
 
 RosoutPanel::~RosoutPanel()
 {
+  shutdown_thread_ = true;
+  check_master_thread_->join();
+  delete check_master_thread_;
+
   unsubscribe();
 
   Disconnect(process_timer_->GetId(), wxEVT_TIMER, wxTimerEventHandler(RosoutPanel::onProcessTimer), NULL, this);
@@ -461,7 +473,10 @@ void printStuff(const std::string& name, T* win)
 
 void RosoutPanel::onProcessTimer(wxTimerEvent& evt)
 {
-  callback_queue_.callAvailable(ros::WallDuration());
+  if (connected_)
+  {
+    callback_queue_.callAvailable(ros::WallDuration());
+  }
 
   processMessages();
 
@@ -744,6 +759,44 @@ RosoutMessageSummary RosoutPanel::getMessageSummary(double duration) const
   }
 
   return summary;
+}
+
+void RosoutPanel::checkForMaster()
+{
+  while (!shutdown_thread_)
+  {
+    if (ros::master::check())
+    {
+      if (!connected_)
+      {
+        connected_ = true;
+        ROS_INFO("Reconnected to ROS master");
+        wxCommandEvent event(RECONNECTED_TO_MASTER_EVENT_);
+        wxPostEvent(this, event);
+      }
+    }
+    else if (connected_)
+    {
+      connected_ = false;
+      ROS_INFO("Disconnected from ROS master");
+      wxCommandEvent event(DISCONNECTED_FROM_MASTER_EVENT_);
+      wxPostEvent(this, event);
+    }
+    boost::this_thread::sleep(boost::posix_time::milliseconds(500));
+  }
+}
+
+void RosoutPanel::onMasterReconnected(wxEvent& event)
+{
+  Enable(1);
+  nh_.setCallbackQueue(&callback_queue_);
+  subscribe();
+}
+
+void RosoutPanel::onMasterDisconnected(wxEvent& event)
+{
+  Enable(0);
+  nh_.shutdown();
 }
 
 } // namespace rxtools

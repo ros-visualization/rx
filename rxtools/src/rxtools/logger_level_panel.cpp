@@ -33,6 +33,7 @@
 #include <roscpp/GetLoggers.h>
 #include <roscpp/SetLoggerLevel.h>
 
+#include <wx/event.h>
 #include <wx/msgdlg.h>
 
 #include <algorithm>
@@ -42,13 +43,23 @@ namespace rxtools
 
 LoggerLevelPanel::LoggerLevelPanel(wxWindow* parent, int id, wxPoint pos, wxSize size, int style)
 : LoggerLevelPanelBase(parent, id, pos, size, style)
+, connected_(true)
+, shutdown_thread_(false)
+, RECONNECTED_TO_MASTER_EVENT_(wxNewEventType())
+, DISCONNECTED_FROM_MASTER_EVENT_(wxNewEventType())
 {
+  Connect(RECONNECTED_TO_MASTER_EVENT_, (wxObjectEventFunction)&LoggerLevelPanel::onMasterReconnected, 0, this);
+  Connect(DISCONNECTED_FROM_MASTER_EVENT_, (wxObjectEventFunction)&LoggerLevelPanel::onMasterDisconnected, 0, this);
+  check_master_thread_ = new boost::thread(boost::bind(&LoggerLevelPanel::checkForMaster, this));
+
   fillNodeList();
 }
 
 LoggerLevelPanel::~LoggerLevelPanel()
 {
-
+  shutdown_thread_ = true;
+  check_master_thread_->join();
+  delete check_master_thread_;
 }
 
 void LoggerLevelPanel::fillNodeList()
@@ -199,6 +210,42 @@ void LoggerLevelPanel::onLevelSelected( wxCommandEvent& event )
   {
     loggers_[logger] = level;
   }
+}
+
+void LoggerLevelPanel::checkForMaster()
+{
+  while (!shutdown_thread_)
+  {
+    if (ros::master::check())
+    {
+      if (!connected_)
+      {
+        connected_ = true;
+        ROS_INFO("Reconnected to ROS master");
+        wxCommandEvent event(RECONNECTED_TO_MASTER_EVENT_);
+        wxPostEvent(this, event);
+      }
+    }
+    else if (connected_)
+    {
+      connected_ = false;
+      ROS_INFO("Disconnected from ROS master");
+      wxCommandEvent event(DISCONNECTED_FROM_MASTER_EVENT_);
+      wxPostEvent(this, event);
+    }
+    boost::this_thread::sleep(boost::posix_time::milliseconds(500));
+  }
+}
+
+void LoggerLevelPanel::onMasterReconnected(wxEvent& event)
+{
+  Enable(1);
+  fillNodeList();
+}
+
+void LoggerLevelPanel::onMasterDisconnected(wxEvent& event)
+{
+  Enable(0);
 }
 
 } // namespace rxtools

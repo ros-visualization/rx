@@ -32,9 +32,12 @@
 
 #include "rosout_generated.h"
 
+#include <boost/thread/thread.hpp>
 #include <ros/ros.h>
 
 #include <map>
+
+class wxEvent;
 
 namespace rxtools
 {
@@ -59,6 +62,16 @@ protected:
 
   typedef std::map<std::string, std::string> M_string;
   M_string loggers_;
+
+  void checkForMaster();
+  bool connected_; ///< Are we connected to master?
+  boost::thread* check_master_thread_; ///< Thread used to periodically check for master
+  bool shutdown_thread_; ///< Should the thread terminate?
+
+  const int RECONNECTED_TO_MASTER_EVENT_;
+  const int DISCONNECTED_FROM_MASTER_EVENT_;
+  void onMasterReconnected(wxEvent& event);
+  void onMasterDisconnected(wxEvent& event);
 };
 
 } // namespace rxtools

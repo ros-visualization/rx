@@ -1,7 +1,7 @@
 <stack>
   <description brief="rx">GUI tools for ROS: rxbag, rxplot, rxgraph, and others.</description>
   <author>Maintained by Ken Conley</author>
-  <version>1.7.1</version>
+  <version>1.7.2</version>
   <license>BSD,LGPL/BSD,Creative Commons,wxWindows,BSD, Creative Commons</license>  
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/rx</url>

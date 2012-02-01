@@ -330,6 +330,9 @@ class RxPlotFrame(wx.Frame):
 
                     # pad the min/max
                     delta = ymax - ymin
+                    # fix wrong scaling of axis for zero range using a synthetic delta (see #2046)
+                    if delta == 0:
+                        delta = ymax
                     ymin -= .05*delta
                     ymax += .05*delta
                     

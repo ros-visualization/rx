@@ -41,15 +41,6 @@
 namespace rxtools
 {
 
-TopicDisplayDialog::TopicDisplayDialog(wxWindow* parent, ros::Node*, bool multiselect, const std::string& message_type)
-: GenTopicDisplayDialog(parent)
-{
-  topic_display_panel_ = new TopicDisplay(tree_panel_, message_type, false, tree_panel_->GetSize());
-  topic_display_panel_->setMultiselectAllowed(multiselect);
-
-  topic_display_panel_->Connect(wxEVT_COMMAND_TREE_ITEM_ACTIVATED, wxTreeEventHandler( TopicDisplayDialog::onTreeItemActivated ), NULL, this );
-}
-
 TopicDisplayDialog::TopicDisplayDialog(wxWindow* parent, bool multiselect, const std::string& message_type)
 : GenTopicDisplayDialog(parent)
 {

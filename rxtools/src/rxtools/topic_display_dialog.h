@@ -57,11 +57,6 @@ class TopicDisplayDialog : public GenTopicDisplayDialog
 {
 public:
   /**
-   * \deprecated
-   */
-  __attribute__((deprecated)) TopicDisplayDialog(wxWindow* parent, ros::Node*, bool multiselect, const std::string& message_type = "");
-
-  /**
    * \brief Constructor
    * \param parent The parent window, or NULL
    * \param node The ROS node

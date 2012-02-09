@@ -27,7 +27,7 @@ include_directories(${PYTHON_INCLUDE_PATH})
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
 # shared library (for C++)
-add_library(${PROJECT_NAME} src/rxtools/topic_display.cpp
+add_library(${PROJECT_NAME} SHARED src/rxtools/topic_display.cpp
                             src/rxtools/topic_display_generated.cpp
                             src/rxtools/topic_display_dialog.cpp
                             src/rxtools/rosout_generated.cpp 
@@ -78,7 +78,7 @@ add_custom_command(OUTPUT   ${SWIG_OUTPUT_CPP_FILE}
 # workaround for a deficiency in CMake 2.4's handling of generated sources.
 include_directories(${PROJECT_SOURCE_DIR}/src/rxtools)
 # shared library (with SWIG)
-add_library(python_${PROJECT_NAME} ${SWIG_OUTPUT_CPP_FILE})
+add_library(python_${PROJECT_NAME} SHARED ${SWIG_OUTPUT_CPP_FILE})
 # swig python needs a shared library named _<modulename>.[so|dll|...]
 # this renames the output file to conform to that by prepending
 # an underscore in place of the "lib" prefix.

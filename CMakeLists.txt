@@ -6,6 +6,7 @@ find_package(catkin REQUIRED)
 catkin_export_python()
 
 find_package(wxWidgets REQUIRED)
+catkin_stack()
 
 foreach(subdir
     xdot

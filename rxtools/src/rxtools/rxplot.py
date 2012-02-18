@@ -126,6 +126,8 @@ class RxPlotFrame(wx.Frame):
         self.title = options.title
         self.legend = options.legend
         self.mode = options.mode
+        self.miny = options.miny
+        self.maxy = options.maxy
         if self.mode == '2d':
             self.draw_plot = self.draw_plot_2d
             self.init_plot = self.init_plot_2d
@@ -313,7 +315,8 @@ class RxPlotFrame(wx.Frame):
             for topic_list in self.topics:
                 axes = self.axes[axes_index] 
                 axes_index += 1
-                ymin = ymax = None
+                ymin = self.miny
+                ymax = self.maxy
                 for t in topic_list:
                     datax = self.datax[plot_index]
                     datay = self.datay[plot_index]
@@ -321,7 +324,7 @@ class RxPlotFrame(wx.Frame):
 
                     xmax = datax[-1]
                     xmin = xmax - self.period
-                    if ymin is None:
+                    if ymin==0 and ymax==0:
                         ymin = min(datay)
                         ymax = max(datay)
                     else:

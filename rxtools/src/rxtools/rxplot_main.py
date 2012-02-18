@@ -66,6 +66,12 @@ def rxplot_main():
     parser.add_option("-t", "--title", type="string",
                       dest="title", default='RXPlot',
                       help="set the title")
+    parser.add_option("--ymax", type="float",
+                      dest="maxy", default=0,
+                      help="set initial y-axis maximum")
+    parser.add_option("--ymin", type="float",
+                      dest="miny", default=0,
+                      help="set initial y-axis minimum")
     parser.add_option("-b", "--buffer", type="int",
                       dest="buffer", default=-1,
                       help="set size of buffer in seconds (default of -1 keeps all data)")

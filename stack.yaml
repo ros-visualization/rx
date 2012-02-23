@@ -1,5 +1,5 @@
 Catkin-ProjectName: rx
-Version: 1.8.0
+Version: 1.8.1
 Depends: catkin, ros_comm, rospack, wxwidgets, swig-wx
 Description: GUI tools for ROS - rxbag, rxplot, rxgraph, and others
 Author: Ken Conley et al

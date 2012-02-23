@@ -113,6 +113,9 @@ install(TARGETS
   rxloggerlevel rxconsole
   RUNTIME DESTINATION share/rxtools/bin
   )
+install(TARGETS ${PROJECT_NAME}
+  LIBRARY DESTINATION lib
+  )
 install(DIRECTORY icons
   DESTINATION share/rxtools/
   )

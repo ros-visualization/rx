@@ -119,4 +119,7 @@ install(TARGETS ${PROJECT_NAME}
 install(DIRECTORY icons
   DESTINATION share/rxtools/
   )
-
+install(TARGETS ${PROJECT_NAME}
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    )

@@ -27,7 +27,7 @@ include_directories(${PYTHON_INCLUDE_PATH})
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
 # shared library (for C++)
-add_library(${PROJECT_NAME} SHARED src/rxtools/topic_display.cpp
+add_library(${PROJECT_NAME} src/rxtools/topic_display.cpp
                             src/rxtools/topic_display_generated.cpp
                             src/rxtools/topic_display_dialog.cpp
                             src/rxtools/rosout_generated.cpp 

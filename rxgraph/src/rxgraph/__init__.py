@@ -58,11 +58,16 @@ def rxgraph_main():
     if args:
         parser.error("invalid arguments")
 
-
+    graphviz_found = False
     try:
-        subprocess.check_call(['dot', '-V'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen(['dot', '-V'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if p.wait() == 0:
+            graphviz_found = True
     except:
-        print("Graphviz does not appear to be installed on your system. Please run:\n\n\trosdep install rosgraph\n\nto install the necessary dependencies on your system",file=sys.stderr)
+        pass
+    
+    if not graphviz_found:
+        print("Graphviz does not appear to be installed on your system. Please run:\n\n\trosdep install rxgraph\n\nto install the necessary dependencies on your system",file=sys.stderr)
         sys.exit(1)
 
         

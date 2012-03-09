@@ -61,7 +61,8 @@ def rxgraph_main():
     graphviz_found = False
     try:
         p = subprocess.Popen(['dot', '-V'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        if p.wait() == 0:
+        p.communicate()
+        if p.returncode == 0:
             graphviz_found = True
     except:
         pass

@@ -26,6 +26,8 @@ include_directories(${PYTHON_INCLUDE_PATH})
 
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
+add_definitions(-DSWIG_TYPE_TABLE=_wxPython_table -DWXP_USE_THREAD=1)
+
 # shared library (for C++)
 add_library(${PROJECT_NAME} src/rxtools/topic_display.cpp
                             src/rxtools/topic_display_generated.cpp

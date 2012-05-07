@@ -104,8 +104,8 @@ target_link_libraries(rxconsole ${PROJECT_NAME} ${ROS_LIBRARIES})
 add_executable(rxloggerlevel src/rxloggerlevel/rxloggerlevel.cpp)
 target_link_libraries(rxloggerlevel ${PROJECT_NAME} ${ROS_LIBRARIES})
 
-install(FILES scripts/rxplot
-  DESTINATION share/rxplot/bin
+install(PROGRAMS scripts/rxplot
+  DESTINATION share/rxtools/bin
   )
 install(TARGETS
   rxloggerlevel rxconsole

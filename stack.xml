@@ -2,8 +2,9 @@
   <name>rx</name>
   <version>1.7.2</version>
   <description>GUI tools for ROS - rxbag, rxplot, rxgraph, and others</description>
-  <author>Ken Conley, Brian Gerkey</author>
-  <maintainer>Dirk Thomas dthomas@willowgarage.com</maintainer>
+  <author>Ken Conley</author>
+  <author>Brian Gerkey</author>
+  <maintainer email="dthomas@willowgarage.com">Dirk Thomas</maintainer>
   <license>BSD,LGPL/BSD,Creative Commons,wxWindows,BSD, Creative Commons</license>  
   <copyright>Willow Garage</copyright>
   <url>http://www.ros.org/wiki/rx</url>

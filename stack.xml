@@ -1,6 +1,6 @@
 <stack>
   <name>rx</name>
-  <version>1.7.2</version>
+  <version>1.7.3</version>
   <description>GUI tools for ROS - rxbag, rxplot, rxgraph, and others</description>
   <author>Ken Conley</author>
   <author>Brian Gerkey</author>

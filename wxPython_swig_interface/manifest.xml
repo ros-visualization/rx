@@ -1,5 +1,4 @@
 <package>
-<catkin/>
 <description brief="wxPython SWIG interface files">
 Interface files used with SWIG to allow use of custom C++ widgets with wxPython code.
 

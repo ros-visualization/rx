@@ -56,7 +56,7 @@ def get_info_text(selection_url):
             node_name = selection_url[5:]
             master = rosgraph.Master('/rxgraph')
             node_api = rosnode.get_api_uri(master, node_name)
-            return rosnode.get_node_info_description(node_name) + rosnode.get_node_connection_info_description(node_api)
+            return rosnode.get_node_info_description(node_name) + rosnode.get_node_connection_info_description(node_api, master)
         except rosnode.ROSNodeException, e:
             return "ERROR: %s"%str(e)
 

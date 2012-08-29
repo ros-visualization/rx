@@ -45,6 +45,7 @@ import threading
 import time
 
 import roslib.message
+import roslib.names
 import rosgraph
 import rospy
 

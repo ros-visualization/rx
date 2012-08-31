@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 project(rxtools)
 
-find_package(ROS REQUIRED COMPONENTS
-  catkin rosconsole roscpp roslib rostime xmlrpcpp wxPython_swig_interface
+find_package(catkin REQUIRED COMPONENTS
+  rosconsole roscpp roslib rostime xmlrpcpp wxpython_swig_interface
   )
-include_directories(${ROS_INCLUDE_DIRS})
+include_directories(${catkin_INCLUDE_DIRS})
+link_directories(${catkin_LIBRARY_DIRS})
 
 find_package(Boost REQUIRED COMPONENTS thread regex signals)
 include_directories(${Boost_INCLUDE_DIRS})
@@ -44,7 +45,7 @@ add_library(${PROJECT_NAME} src/rxtools/topic_display.cpp
                             src/rxtools/logger_level_panel.cpp
                             src/rxtools/init_roscpp.cpp)
 add_dependencies(${PROJECT_NAME} rosgraph_msgs_gencpp)
-target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES} ${ROS_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES} ${catkin_LIBRARIES})
 
 # Find the cpp-flags for wx which are used in CFG_EXTRAS
 find_program(WX_CONFIG_BIN wx-config)
@@ -64,6 +65,8 @@ set(SWIG_OUTPUT_PYTHON_FILE ${PROJECT_BINARY_DIR}/rxtoolscpp.py)
 
 set(SWIG_OUTPUT_CPP_FILE ${PROJECT_BINARY_DIR}/rosout_panel_swig_generated.cpp)
 set(SWIG_COMMAND ${swigwx_BIN} ${SWIG_FLAGS} ${wxpython_swig_interface_SWIG_FLAGS} -o ${SWIG_OUTPUT_CPP_FILE} -outdir ${PROJECT_BINARY_DIR} -module rxtoolscpp ${SWIG_INTERFACE_FILE})
+
+message("SWIG_COMMAND ${SWIG_COMMAND}")
 
 set_source_files_properties(${SWIG_OUTPUT_CPP_FILE} PROPERTIES GENERATED true)
 set_source_files_properties(${SWIG_OUTPUT_PYTHON_FILE} PROPERTIES GENERATED true)
@@ -98,11 +101,11 @@ target_link_libraries(python_${PROJECT_NAME} ${PROJECT_NAME} ${PYTHON_LIBRARIES}
 
 #rxconsole binary
 add_executable(rxconsole src/rxconsole/rxconsole.cpp)
-target_link_libraries(rxconsole ${PROJECT_NAME} ${ROS_LIBRARIES})
+target_link_libraries(rxconsole ${PROJECT_NAME} ${catkin_LIBRARIES})
 
 #rxloggerlevel binary
 add_executable(rxloggerlevel src/rxloggerlevel/rxloggerlevel.cpp)
-target_link_libraries(rxloggerlevel ${PROJECT_NAME} ${ROS_LIBRARIES})
+target_link_libraries(rxloggerlevel ${PROJECT_NAME} ${catkin_LIBRARIES})
 
 install(PROGRAMS scripts/rxplot
   DESTINATION share/rxtools/bin

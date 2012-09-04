@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 project(rxtools)
 
 find_package(catkin REQUIRED COMPONENTS
-  rosconsole roscpp roslib rostime xmlrpcpp wxpython_swig_interface
-  )
+  rosconsole roscpp roslib rostime xmlrpcpp wxpython_swig_interface)
+catkin_project(rxtools)
+
 include_directories(${catkin_INCLUDE_DIRS})
 link_directories(${catkin_LIBRARY_DIRS})
 
@@ -30,20 +31,21 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 add_definitions(-DSWIG_TYPE_TABLE=_wxPython_table -DWXP_USE_THREAD=1)
 
 # shared library (for C++)
-add_library(${PROJECT_NAME} src/rxtools/topic_display.cpp
-                            src/rxtools/topic_display_generated.cpp
-                            src/rxtools/topic_display_dialog.cpp
-                            src/rxtools/rosout_generated.cpp 
-                            src/rxtools/rosout_panel.cpp
-                            src/rxtools/rosout_filter.cpp
-                            src/rxtools/rosout_text_filter.cpp
-                            src/rxtools/rosout_text_filter_control.cpp
-                            src/rxtools/rosout_severity_filter.cpp
-                            src/rxtools/rosout_severity_filter_control.cpp
-                            src/rxtools/rosout_list_control.cpp
-                            src/rxtools/rosout_setup_dialog.cpp
-                            src/rxtools/logger_level_panel.cpp
-                            src/rxtools/init_roscpp.cpp)
+add_library(${PROJECT_NAME}
+  src/rxtools/topic_display.cpp
+  src/rxtools/topic_display_generated.cpp
+  src/rxtools/topic_display_dialog.cpp
+  src/rxtools/rosout_generated.cpp 
+  src/rxtools/rosout_panel.cpp
+  src/rxtools/rosout_filter.cpp
+  src/rxtools/rosout_text_filter.cpp
+  src/rxtools/rosout_text_filter_control.cpp
+  src/rxtools/rosout_severity_filter.cpp
+  src/rxtools/rosout_severity_filter_control.cpp
+  src/rxtools/rosout_list_control.cpp
+  src/rxtools/rosout_setup_dialog.cpp
+  src/rxtools/logger_level_panel.cpp
+  src/rxtools/init_roscpp.cpp)
 add_dependencies(${PROJECT_NAME} rosgraph_msgs_gencpp)
 target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES} ${catkin_LIBRARIES})
 
@@ -70,13 +72,16 @@ message("SWIG_COMMAND ${SWIG_COMMAND}")
 
 set_source_files_properties(${SWIG_OUTPUT_CPP_FILE} PROPERTIES GENERATED true)
 set_source_files_properties(${SWIG_OUTPUT_PYTHON_FILE} PROPERTIES GENERATED true)
-add_custom_command(OUTPUT   ${SWIG_OUTPUT_CPP_FILE} 
-                            ${SWIG_OUTPUT_PYTHON_FILE}
-                   COMMAND  ${SWIG_COMMAND}
-                   DEPENDS  ${SWIG_INTERFACE_FILE}
-                            src/rxtools/rosout_generated.h
-                            src/rxtools/rosout_panel.h
-                            src/rxtools/init_roscpp.h)
+add_custom_command(OUTPUT
+  ${SWIG_OUTPUT_CPP_FILE} 
+  ${SWIG_OUTPUT_PYTHON_FILE}
+  COMMAND
+  ${SWIG_COMMAND}
+  DEPENDS
+  ${SWIG_INTERFACE_FILE}
+  src/rxtools/rosout_generated.h
+  src/rxtools/rosout_panel.h
+  src/rxtools/init_roscpp.h)
 
 # We add src/wx_rosout to the include list so that
 # ogre_tools_swig_generated.cpp can find its headers.  This is part of a
@@ -90,11 +95,11 @@ add_library(python_${PROJECT_NAME} SHARED ${SWIG_OUTPUT_CPP_FILE})
 # If on Darwin, force the suffix so ".so", because the MacPorts
 # version of Python won't find _foo.dylib for 'import _foo'
 set_target_properties(python_${PROJECT_NAME}
-                      PROPERTIES OUTPUT_NAME ${PROJECT_NAME}cpp
-                      PREFIX "_")
+  PROPERTIES OUTPUT_NAME ${PROJECT_NAME}cpp
+  PREFIX "_")
 if(APPLE)
   set_target_properties(python_${PROJECT_NAME}
-                        PROPERTIES SUFFIX ".so")
+    PROPERTIES SUFFIX ".so")
 endif(APPLE)
 
 target_link_libraries(python_${PROJECT_NAME} ${PROJECT_NAME} ${PYTHON_LIBRARIES})
@@ -108,31 +113,22 @@ add_executable(rxloggerlevel src/rxloggerlevel/rxloggerlevel.cpp)
 target_link_libraries(rxloggerlevel ${PROJECT_NAME} ${catkin_LIBRARIES})
 
 install(PROGRAMS scripts/rxplot
-  DESTINATION share/rxtools/bin
-  )
-install(TARGETS
-  rxloggerlevel rxconsole
-  RUNTIME DESTINATION bin
-  )
-install(TARGETS
-  rxloggerlevel rxconsole
-  RUNTIME DESTINATION share/rxtools/bin
-  )
+  DESTINATION ${PROJECT_LIBEXEC_DESTINATION})
+install(TARGETS rxloggerlevel rxconsole
+  RUNTIME DESTINATION ${GLOBAL_BIN_DESTINATION})
+install(TARGETS rxloggerlevel rxconsole
+  RUNTIME DESTINATION ${PROJECT_LIBEXEC_DESTINATION})
 install(DIRECTORY icons
-  DESTINATION share/rxtools/
-  )
+  DESTINATION ${PROJECT_SHARE_DESTINATION})
 install(TARGETS ${PROJECT_NAME}
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  )
+  ARCHIVE DESTINATION ${PROJECT_LIB_DESTINATION}
+  LIBRARY DESTINATION ${PROJECT_LIB_DESTINATION})
 install(DIRECTORY src/rxtools/
-  DESTINATION share/rxtools/src/rxtools/
+  DESTINATION ${PROJECT_SHARE_DESTINATION}/src/rxtools/
   FILES_MATCHING PATTERN "*.h"
   PATTERN ".svn" EXCLUDE)
 install(TARGETS python_${PROJECT_NAME}
-  ARCHIVE DESTINATION ${INSTALLED_PYTHONPATH}/rxtools
-  LIBRARY DESTINATION ${INSTALLED_PYTHONPATH}/rxtools
-  )
+  ARCHIVE DESTINATION ${PROJECT_PYTHON_DESTINATION}
+  LIBRARY DESTINATION ${PROJECT_PYTHON_DESTINATION})
 install(FILES ${PROJECT_BINARY_DIR}/rxtoolscpp.py
-  DESTINATION ${INSTALLED_PYTHONPATH}/rxtools
-  )
+  DESTINATION ${PROJECT_PYTHON_DESTINATION})

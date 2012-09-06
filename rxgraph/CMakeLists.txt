@@ -4,4 +4,4 @@ find_package(catkin REQUIRED)
 catkin_project(rxgraph)
 
 install(PROGRAMS scripts/rxgraph
-  DESTINATION ${PROJECT_LIBEXEC_DESTINATION})
+  DESTINATION ${CATKIN_PROJECT_BIN_DESTINATION})

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(rxtools)
 
 find_package(catkin REQUIRED COMPONENTS
-  rosconsole roscpp roslib rostime xmlrpcpp wxpython_swig_interface)
+  rosconsole roscpp roslib rostime xmlrpcpp wxPython_swig_interface)
 catkin_project(rxtools)
 
 include_directories(${catkin_INCLUDE_DIRS})
@@ -66,7 +66,7 @@ set(SWIG_INTERFACE_FILE ${PROJECT_SOURCE_DIR}/src/rxtools/rxtools.i)
 set(SWIG_OUTPUT_PYTHON_FILE ${PROJECT_BINARY_DIR}/rxtoolscpp.py)
 
 set(SWIG_OUTPUT_CPP_FILE ${PROJECT_BINARY_DIR}/rosout_panel_swig_generated.cpp)
-set(SWIG_COMMAND ${swigwx_BIN} ${SWIG_FLAGS} ${wxpython_swig_interface_SWIG_FLAGS} -o ${SWIG_OUTPUT_CPP_FILE} -outdir ${PROJECT_BINARY_DIR} -module rxtoolscpp ${SWIG_INTERFACE_FILE})
+set(SWIG_COMMAND ${swigwx_BIN} ${SWIG_FLAGS} ${wxPython_swig_interface_SWIG_FLAGS} -o ${SWIG_OUTPUT_CPP_FILE} -outdir ${PROJECT_BINARY_DIR} -module rxtoolscpp ${SWIG_INTERFACE_FILE})
 
 message("SWIG_COMMAND ${SWIG_COMMAND}")
 

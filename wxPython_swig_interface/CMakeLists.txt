@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
-project(wxpython_swig_interface)
+project(wxPython_swig_interface)
 find_package(catkin REQUIRED)
 
-catkin_project(wxpython_swig_interface
+catkin_project(wxPython_swig_interface
   CFG_EXTRAS rx_wxPython-extras.cmake)

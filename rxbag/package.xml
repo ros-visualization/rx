@@ -18,10 +18,10 @@
   <build_depend>catkin</build_depend>
 
   <run_depend>python-gtk2</run_depend>
+  <run_depend>python-rospkg</run_depend>
   <run_depend>rosbag</run_depend>
   <run_depend>rosgraph</run_depend>
   <run_depend>roslib</run_depend>
-  <run_depend>rospkg</run_depend>
   <run_depend>rospy</run_depend>
   <run_depend>wxpython</run_depend>
 </package>

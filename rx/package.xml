@@ -1,0 +1,25 @@
+<package>
+  <name>rx</name>
+  <version>1.9.3</version>
+  <description>GUI tools for ROS - rxbag, rxplot, rxgraph, and others</description>
+  <maintainer email="dthomas@willowgarage.com">Dirk Thomas</maintainer>
+  <license>BSD</license>
+  <license>LGPL</license>
+  <license>Creative Commons</license>
+  <license>wxWindows</license>
+  <license>Creative Commons</license>
+
+  <url>http://www.ros.org/wiki/rx</url>
+  <author>Ken Conley</author>
+  <author>Brian Gerkey</author>
+
+  <run_depend>rxbag</run_depend>
+  <run_depend>rxgraph</run_depend>
+  <run_depend>rxtools</run_depend>
+  <run_depend>wxPython_swig_interface</run_depend>
+  <run_depend>xdot</run_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>

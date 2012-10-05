@@ -3,30 +3,23 @@ project(rxtools)
 
 find_package(catkin REQUIRED COMPONENTS
   rosconsole roscpp roslib rostime xmlrpcpp wxPython_swig_interface)
-catkin_project(rxtools)
+catkin_package()
 
-include_directories(${catkin_INCLUDE_DIRS})
-link_directories(${catkin_LIBRARY_DIRS})
+catkin_python_setup()
 
 find_package(Boost REQUIRED COMPONENTS thread regex signals)
-include_directories(${Boost_INCLUDE_DIRS})
-
-include_directories(include)
-
+find_package(PythonLibs REQUIRED)
 find_package(wxWidgets REQUIRED)
 include(${wxWidgets_USE_FILE})
-include_directories(${wxWidgets_INCLUDE_DIRS})
+
+include_directories(include src ${Boost_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS} ${PYTHON_INCLUDE_PATH} ${wxWidgets_INCLUDE_DIRS})
+link_directories(${catkin_LIBRARY_DIRS})
 
 # Find the wx-enhanced swig executable
 find_program(swigwx_BIN "swig" PATHS ${CMAKE_INSTALL_PREFIX}/bin)
 if(${swigwx_BIN} STREQUAL "swigwx_BIN-NOTFOUND")
   message(FATAL_ERROR "wx-enhanced swig binary not found.  Aborting...")
 endif()
-
-find_package(PythonLibs REQUIRED)
-include_directories(${PYTHON_INCLUDE_PATH})
-
-include_directories(${PROJECT_SOURCE_DIR}/src)
 
 add_definitions(-DSWIG_TYPE_TABLE=_wxPython_table -DWXP_USE_THREAD=1)
 
@@ -55,7 +48,7 @@ if(WX_CONFIG_BIN-NOTFOUND)
     message(FATAL_ERROR "wx-config not found!  Aborting...")
 endif()
 execute_process(COMMAND ${WX_CONFIG_BIN} --cppflags
-                OUTPUT_VARIABLE WX_CONFIG_CPPFLAGS)
+  OUTPUT_VARIABLE WX_CONFIG_CPPFLAGS)
 # strip newline from the end
 string(REGEX REPLACE "\r?\n$" "" WX_CONFIG_CPPFLAGS "${WX_CONFIG_CPPFLAGS}")
 
@@ -67,8 +60,6 @@ set(SWIG_OUTPUT_PYTHON_FILE ${PROJECT_BINARY_DIR}/rxtoolscpp.py)
 
 set(SWIG_OUTPUT_CPP_FILE ${PROJECT_BINARY_DIR}/rosout_panel_swig_generated.cpp)
 set(SWIG_COMMAND ${swigwx_BIN} ${SWIG_FLAGS} ${wxPython_swig_interface_SWIG_FLAGS} -o ${SWIG_OUTPUT_CPP_FILE} -outdir ${PROJECT_BINARY_DIR} -module rxtoolscpp ${SWIG_INTERFACE_FILE})
-
-message("SWIG_COMMAND ${SWIG_COMMAND}")
 
 set_source_files_properties(${SWIG_OUTPUT_CPP_FILE} PROPERTIES GENERATED true)
 set_source_files_properties(${SWIG_OUTPUT_PYTHON_FILE} PROPERTIES GENERATED true)
@@ -113,23 +104,23 @@ add_executable(rxloggerlevel src/rxloggerlevel/rxloggerlevel.cpp)
 target_link_libraries(rxloggerlevel ${PROJECT_NAME} ${catkin_LIBRARIES})
 
 install(PROGRAMS scripts/rxplot
-  DESTINATION ${CATKIN_PROJECT_BIN_DESTINATION})
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 install(TARGETS rxloggerlevel rxconsole
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
 install(TARGETS rxloggerlevel rxconsole
-  RUNTIME DESTINATION ${CATKIN_PROJECT_BIN_DESTINATION})
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 install(DIRECTORY icons
-  DESTINATION ${CATKIN_PROJECT_SHARE_DESTINATION}
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   PATTERN ".svn" EXCLUDE)
 install(TARGETS ${PROJECT_NAME}
-  ARCHIVE DESTINATION ${CATKIN_PROJECT_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PROJECT_LIB_DESTINATION})
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 install(DIRECTORY src/rxtools/
-  DESTINATION ${CATKIN_PROJECT_SHARE_DESTINATION}/src/rxtools
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/src/rxtools
   FILES_MATCHING PATTERN "*.h"
   PATTERN ".svn" EXCLUDE)
 install(TARGETS python_${PROJECT_NAME}
-  ARCHIVE DESTINATION ${CATKIN_PROJECT_PYTHON_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PROJECT_PYTHON_DESTINATION})
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION})
 install(FILES ${PROJECT_BINARY_DIR}/rxtoolscpp.py
-  DESTINATION ${CATKIN_PROJECT_PYTHON_DESTINATION})
+  DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION})

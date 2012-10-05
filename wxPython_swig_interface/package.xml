@@ -1,0 +1,22 @@
+<package>
+  <name>wxPython_swig_interface</name>
+  <version>1.9.3</version>
+  <description>
+    Interface files used with SWIG to allow use of custom C++ widgets with wxPython code.
+
+    These interface files were pulled from wxPython 2.8.1, because at the time that was the target version (since we were using Ubuntu Feisty).
+    We will probably continue to use these interface files until they no longer work for some reason.
+
+    The ideal situation would be if these were installed in system installs along with wxPython, but unfortunately they are not.
+  </description>
+  <maintainer email="dthomas@willowgarage.com">Dirk Thomas</maintainer>
+  <license>wxWindows</license>  
+
+  <url type="website">http://www.ros.org/wiki/wxPython_swig_interface</url>
+  <url type="repository">https://code.ros.org/svn/ros/stacks/rx</url>
+  <url type="bugtracker">https://code.ros.org/trac/ros/query?status=assigned&amp;status=new&amp;status=reopened&amp;component=rx&amp;order=priority</url>
+
+  <build_depend>catkin</build_depend>
+
+  <run_depend>wxpython</run_depend>
+</package>

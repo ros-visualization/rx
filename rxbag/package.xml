@@ -1,0 +1,27 @@
+<package>
+  <name>rxbag</name>
+  <version>1.9.3</version>
+  <description>
+    rxbag is a GUI tool for visualizing, inspecting and replaying histories of ROS messages.
+
+    Some icons from the Silk icon pack are used, which is available from <a href="http://www.famfamfam.com/lab/icons/silk/">famfamfam.com</a>.
+  </description>
+  <maintainer email="dthomas@willowgarage.com">Dirk Thomas</maintainer>
+  <license>BSD</license>  
+  <license>Creative Commons</license>
+
+  <url type="website">http://www.ros.org/wiki/rxbag</url>
+  <url type="repository">https://code.ros.org/svn/ros/stacks/rx</url>
+  <url type="bugtracker">https://code.ros.org/trac/ros/query?status=assigned&amp;status=new&amp;status=reopened&amp;component=rxbag&amp;order=priority</url>
+  <author>Tim Field</author>
+
+  <build_depend>catkin</build_depend>
+
+  <run_depend>python-gtk2</run_depend>
+  <run_depend>rosbag</run_depend>
+  <run_depend>rosgraph</run_depend>
+  <run_depend>roslib</run_depend>
+  <run_depend>rospkg</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>wxpython</run_depend>
+</package>

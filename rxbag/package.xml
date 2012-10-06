@@ -16,6 +16,7 @@
   <author>Tim Field</author>
 
   <build_depend>catkin</build_depend>
+  <build_depend>wxpython_swig_interface</build_depend>
 
   <run_depend>python-gtk2</run_depend>
   <run_depend>python-rospkg</run_depend>
@@ -24,4 +25,5 @@
   <run_depend>roslib</run_depend>
   <run_depend>rospy</run_depend>
   <run_depend>wxpython</run_depend>
+  <run_depend>wxpython_swig_interface</run_depend>
 </package>

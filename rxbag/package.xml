@@ -1,6 +1,6 @@
 <package>
   <name>rxbag</name>
-  <version>1.9.6</version>
+  <version>1.9.7</version>
   <description>
     rxbag is a GUI tool for visualizing, inspecting and replaying histories of ROS messages.
 
@@ -17,6 +17,7 @@
 
   <build_depend>catkin</build_depend>
   <build_depend>wxpython_swig_interface</build_depend>
+  <build_depend>wxwidgets</build_depend>
 
   <run_depend>python-gtk2</run_depend>
   <run_depend>python-rospkg</run_depend>
@@ -26,4 +27,5 @@
   <run_depend>rospy</run_depend>
   <run_depend>wxpython</run_depend>
   <run_depend>wxpython_swig_interface</run_depend>
+  <run_depend>wxwidgets</run_depend>
 </package>

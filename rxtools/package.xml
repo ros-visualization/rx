@@ -25,6 +25,7 @@
   <build_depend>roscpp</build_depend>
   <build_depend>rosgraph_msgs</build_depend>
   <build_depend>roslib</build_depend>
+  <build_depend>swig-wx</build_depend>
   <build_depend>wxpython_swig_interface</build_depend>
   <build_depend>wxwidgets</build_depend>
 
@@ -34,6 +35,7 @@
   <run_depend>rosgraph_msgs</run_depend>
   <run_depend>roslib</run_depend>
   <run_depend>rospy</run_depend>
+  <run_depend>swig-wx</run_depend>
   <run_depend>wxpython</run_depend>
   <run_depend>wxpython_swig_interface</run_depend>
   <run_depend>wxwidgets</run_depend>

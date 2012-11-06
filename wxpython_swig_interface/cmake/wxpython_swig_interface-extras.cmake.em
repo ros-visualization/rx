@@ -1,5 +1,5 @@
-@[if BUILDSPACE]@
-# swig flags in buildspace
+@[if DEVELSPACE]@
+# swig flags in develspace
   set(@(PROJECT_NAME)_SWIG_FLAGS "-I@(CMAKE_CURRENT_SOURCE_DIR)/src/wxpython_swig_interface")
 @[else]@
 # swig flags in installspace

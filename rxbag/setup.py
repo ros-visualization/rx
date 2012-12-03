@@ -7,6 +7,6 @@ d = parse_package_for_distutils()
 d['packages'] = ['rxbag', 'rxbag.plugin', 'rxbag.util']
 d['package_dir'] = {'': 'src'}
 d['scripts'] = ['scripts/rxbag']
-d['install_requires'] = ['rospkg']
+d['requires'] = ['rospkg']
 
 setup(**d)

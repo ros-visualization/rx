@@ -97,7 +97,11 @@ class RxPlotToolbar(NavigationToolbar):
         # buttons. However, these don't behave as badly under pause so
         # it's not as important to disable those.
         tb_enabled = is_ros_pause() or is_ros_stop()
-        for b in [self._NTB2_BACK, self._NTB2_FORWARD, self._NTB2_PAN, self._NTB2_ZOOM]:
+        try:
+            buttons = [self.wx_ids['Back'], self.wx_ids['Forward'], self.wx_ids['Pan'], self.wx_ids['Zoom']]
+        except AttributeError:
+            buttons = [self._NTB2_BACK, self._NTB2_FORWARD, self._NTB2_PAN, self._NTB2_ZOOM]
+        for b in buttons:
             self.EnableTool(b, tb_enabled)
 
     def _on_pause(self, evt):
@@ -108,8 +112,12 @@ class RxPlotToolbar(NavigationToolbar):
         else:
             self.SetToolNormalBitmap(self.ON_PAUSE, self.pause_bm)
         # cancel state of pan/zoom
-        self.ToggleTool(self._NTB2_PAN, False)
-        self.ToggleTool(self._NTB2_ZOOM, False)
+        try:
+            self.ToggleTool(self.wx_ids['Pan'], False)
+            self.ToggleTool(self.wx_ids['Zoom'], False)
+        except AttributeError:
+            self.ToggleTool(self._NTB2_PAN, False)
+            self.ToggleTool(self._NTB2_ZOOM, False)
         self._active = 'ZOOM'
         self.zoom(tuple())
 

@@ -1,6 +1,6 @@
 <package>
   <name>wxpython_swig_interface</name>
-  <version>1.9.9</version>
+  <version>1.9.10</version>
   <description>
     Interface files used with SWIG to allow use of custom C++ widgets with wxPython code.
 

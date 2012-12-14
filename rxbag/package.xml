@@ -15,7 +15,8 @@
   <url type="bugtracker">https://code.ros.org/trac/ros/query?status=assigned&amp;status=new&amp;status=reopened&amp;component=rxbag&amp;order=priority</url>
   <author>Tim Field</author>
 
-  <build_depend>catkin</build_depend>
+  <buildtool_depend>catkin</buildtool_depend>
+
   <build_depend>wxpython_swig_interface</build_depend>
   <build_depend>wxwidgets</build_depend>
 

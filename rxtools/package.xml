@@ -21,7 +21,8 @@
   <author>Rob Wheeler</author>
   <author>Ken Conley</author>
 
-  <build_depend>catkin</build_depend>
+  <buildtool_depend>catkin</buildtool_depend>
+
   <build_depend>roscpp</build_depend>
   <build_depend>rosgraph_msgs</build_depend>
   <build_depend>roslib</build_depend>

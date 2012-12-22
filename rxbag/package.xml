@@ -1,6 +1,6 @@
 <package>
   <name>rxbag</name>
-  <version>1.9.10</version>
+  <version>1.9.11</version>
   <description>
     rxbag is a GUI tool for visualizing, inspecting and replaying histories of ROS messages.
 

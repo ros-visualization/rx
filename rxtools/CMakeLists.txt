@@ -8,6 +8,7 @@ catkin_package()
 catkin_python_setup()
 
 find_package(Boost REQUIRED COMPONENTS thread regex signals)
+set(Python_ADDITIONAL_VERSIONS 2.7)
 find_package(PythonLibs REQUIRED)
 find_package(wxWidgets REQUIRED)
 include(${wxWidgets_USE_FILE})

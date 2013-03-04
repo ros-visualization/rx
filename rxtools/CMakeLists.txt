@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(rxtools)
 
 find_package(catkin REQUIRED COMPONENTS
-  rosconsole roscpp roslib rostime xmlrpcpp wxpython_swig_interface)
+  rosconsole roscpp roslib rosgraph_msgs rostime xmlrpcpp wxpython_swig_interface)
 catkin_package()
 
 catkin_python_setup()

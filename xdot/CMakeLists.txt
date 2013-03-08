@@ -5,5 +5,5 @@ catkin_package()
 
 catkin_python_setup()
 
-install(FILES scripts/dot_viewer.py
+install(PROGRAMS scripts/dot_viewer.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

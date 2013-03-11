@@ -20,4 +20,8 @@
 
   <run_depend>graphviz</run_depend>
   <run_depend>wxpython</run_depend>
+
+  <export>
+    <deprecated>This wxWidget based tool is EOL - if you still depend on it consider contributing a Qt based tool i.e. a plugin for rqt</deprecated>
+  </export>
 </package>

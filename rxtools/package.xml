@@ -41,4 +41,8 @@
   <run_depend>wxpython_swig_interface</run_depend>
   <run_depend>wxwidgets</run_depend>
   <run_depend>xdot</run_depend>
+
+  <export>
+    <deprecated>These wxWidget based tools are superseded by the Qt based tools rqt_console, rqt_logger_level and rqt_plot</deprecated>
+  </export>
 </package>

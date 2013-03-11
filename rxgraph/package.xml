@@ -24,4 +24,8 @@
   <run_depend>wxpython_swig_interface</run_depend>
   <run_depend>wxwidgets</run_depend>
   <run_depend>xdot</run_depend>
+
+  <export>
+    <deprecated>This wxWidget based tool is superseded by the Qt based tool rqt_graph</deprecated>
+  </export>
 </package>

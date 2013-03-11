@@ -19,4 +19,8 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <run_depend>wxpython</run_depend>
+
+  <export>
+    <deprecated>All wxWidget based tools are to be replaced with Qt based alternatives and therefore this package is obsolete</deprecated>
+  </export>
 </package>

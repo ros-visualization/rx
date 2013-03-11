@@ -20,5 +20,6 @@
 
   <export>
     <metapackage/>
+    <deprecated>These wxWidget based tools are superseded by the Qt based tool rqt and its plugins</deprecated>
   </export>
 </package>

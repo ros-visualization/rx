@@ -12,6 +12,8 @@
   <author>Ken Conley</author>
   <author>Brian Gerkey</author>
 
+  <buildtool_depend>catkin</buildtool_depend>
+
   <run_depend>rxbag</run_depend>
   <run_depend>rxgraph</run_depend>
   <run_depend>rxtools</run_depend>

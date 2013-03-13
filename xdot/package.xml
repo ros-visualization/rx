@@ -7,7 +7,7 @@
     This package adds front-end capabilities to XDot including WX Widget support and a mechanism for receiving callbacks when nodes are clicked.
     This extension is provided as BSD.
   </description>
-  <maintainer email="dthomas@willowgarage.com">Dirk Thomas</maintainer>
+  <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
   <license>LGPL</license>
   <license>BSD</license>  
 

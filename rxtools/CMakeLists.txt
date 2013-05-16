@@ -40,7 +40,7 @@ add_library(${PROJECT_NAME}
   src/rxtools/rosout_setup_dialog.cpp
   src/rxtools/logger_level_panel.cpp
   src/rxtools/init_roscpp.cpp)
-add_dependencies(${PROJECT_NAME} rosgraph_msgs_gencpp)
+add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES} ${Boost_LIBRARIES} ${catkin_LIBRARIES})
 
 # Find the cpp-flags for wx which are used in CFG_EXTRAS

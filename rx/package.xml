@@ -1,6 +1,6 @@
 <package>
   <name>rx</name>
-  <version>1.9.12</version>
+  <version>1.9.13</version>
   <description>GUI tools for ROS - rxbag, rxplot, rxgraph, and others</description>
   <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
   <license>BSD</license>

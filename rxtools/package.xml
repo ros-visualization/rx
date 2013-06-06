@@ -1,6 +1,6 @@
 <package>
   <name>rxtools</name>
-  <version>1.9.12</version>
+  <version>1.9.13</version>
   <description>
     rxtools is two things.
     First it is a library of GUI widgets, written in wxWidgets, that can be embedded in other applications. Second, it is a set of GUI applications that view and manage ROS state.
